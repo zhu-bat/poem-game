@@ -1,6 +1,9 @@
+import random
+from models import *
 from flask import Flask, render_template
 
 app = Flask(__name__)
+
 
 
 @app.route('/')
@@ -10,7 +13,25 @@ def hello_world():  # put application's code here
 
 @app.route('/words-test')
 def words_test():  # put application's code here
-    return render_template('words_test.html', words=["hello", "world", "test", "."])
+
+    s = Server("hello")
+
+    words = s.generate_words()
+    print(words)
+    return render_template('words_test.html', words=words)
+
+
+@app.route('/bussy')
+def bussy():
+    game = Game()
+    bussy = Player('Bussy')
+    game.server.add_player(bussy)
+    zubat = Player('Zubat')
+    game.server.add_player(zubat)
+
+    return game.server.display_players()
+
+
 
 
 if __name__ == '__main__':

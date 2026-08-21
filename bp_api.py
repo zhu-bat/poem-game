@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, Blueprint
+from calendar import error
+
+from flask import Flask, render_template, request, Blueprint, session, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
@@ -9,7 +11,8 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 
 @bp.route('/server', methods=['GET'])
 def get_server_data():
-    server = Server.query.first()
+    server_id = session.get('connected_server') or request.get_json().get('id')
+    server = Server.query.get(server_id)
     if server:
         return server.to_json()
     else:
@@ -36,13 +39,17 @@ def join_game():
     join_code = str(data.get('code'))
     server = Server.query.filter_by(code=join_code).first()
     if not server:
-        return {'message': 'Invalid join code.'}, 400
+        flash("Invalid join code", "error")
+        return redirect(url_for('room_join'))
     player_name = data.get('name')
 
     if player_name:
         player = Player(name=player_name, server=server.id)
         db.session.add(player)
         db.session.commit()
-        return {'message': 'Player joined successfully!', 'player_id': player.id}
+        session['connected_server'] = server.id
+        session['player'] = player.id
+        return redirect(url_for('game'))
     else:
-        return {'message': 'Player name is required.'}, 400
+        flash("Player name is required", "error")
+        return redirect(url_for('room_join'))

@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
@@ -28,8 +28,6 @@ def title_screen():  # put application's code here
 def room_join():
     return render_template('room_join.html')
 
-
-
 @app.route('/words-test')
 def words_test():
     return render_template('words_test.html')
@@ -42,8 +40,23 @@ def test_create():
     db.session.commit()
     return redirect(url_for('room_join'))
 
+@app.route('/game')
+def game():
+    connected_server = session.get('connected_server')
+    if not connected_server:
+        return redirect(url_for('room_join'))
+    server = Server.query.get(connected_server)
+    if not server:
+        return redirect(url_for('room_join'))
+    if server.round == 0:
+        return render_template('pregame_waiting.html')
+    return render_template('words_test.html')
 
 
+@app.route('/clear')
+def clear():
+    session.clear()
+    return redirect(url_for('room_join'))
 
 @app.route('/bussy')
 def bussy():

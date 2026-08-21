@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block head_extra %}
+<script src="{{ url_for('static', filename='game_waiting.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+Wait for the game to begin!
+{% endblock %}

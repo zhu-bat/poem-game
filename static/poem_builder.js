@@ -54,4 +54,27 @@ function redrawPoem() {
     wordCounter.innerHTML = `${poemWords.length}/10 words`;
 }
 
+function submitPoem() {
+    let poem = "";
+    poemWords.forEach((wordIndex) => {
+        poem += selectionWords[wordIndex] + " ";
+    });
+    poem = poem.trim();
+
+//     Send the poem to the server
+    fetch("/submit-poem", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            player_id: 1,  // Replace with actual player ID
+            poem: poem
+        })
+    }).then(response => response.json())
+      .then(data => {
+          console.log(data);
+      });
+}
+
 redrawPoem();

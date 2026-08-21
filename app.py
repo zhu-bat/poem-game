@@ -1,12 +1,12 @@
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///poem_game.db'
+app.secret_key = 'thisisagoodsecretkey'
 db = SQLAlchemy(app)
 
 from models import Server, Player
@@ -17,7 +17,6 @@ with app.app_context():
 @app.route('/')
 def hello_world():  # put application's code here
     return 'Hello World!'
-
 
 @app.route('/words-test')
 def words_test():
@@ -34,7 +33,17 @@ def get_server_data():
 
 @app.route('/submit-poem', methods=['POST'])
 def submit_poem():
-    
+    data = request.get_json()
+    player_id = data.get('player_id')
+    poem = data.get('poem')
+
+    player = Player.query.get(player_id)
+    if player:
+        player.set_poem(poem)
+        db.session.commit()
+        return {'message': 'Poem submitted successfully!'}
+    else:
+        return {'message': 'Player not found.'}, 404
 
 
 @app.route('/bussy')

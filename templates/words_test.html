@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block head_extra %}
+<script src="{{ url_for('static', filename='poem_builder.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<h1>Words Test</h1>
+{% for word in words %}
+<span style="padding: 1em; background: lightgray; border-radius: 1em;">{{ word }}</span>
+{% endfor %}
+<br>
+<div id="poem-container" style="background: lightblue; height: 2em; border-radius: 1em;"></div>
+
+<script>
+
+</script>
+{% endblock %}

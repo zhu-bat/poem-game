@@ -1,0 +1,66 @@
+
+
+* {
+    box-sizing: border-box;
+}
+
+.space-mono-regular {
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.space-mono-bold {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.space-mono-regular-italic {
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.space-mono-bold-italic {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: italic;
+}
+
+body {
+    background-color: rgb(16, 16, 24);
+    font-family: "Space Mono","Space Mono Fallback";
+}
+
+h1 {
+    font-size: 60px;
+    color: white;
+    text-align: center;
+    font-family: "Space Mono", monospace;
+}
+
+
+.poem-selector, .poem-container {
+    background: lightblue;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.5em;
+    min-height: 4em;
+    gap: 0.5em;
+}
+
+.word {
+    padding: 1em;
+    background: lightgray;
+    border-radius: 1em;
+}
+
+.word.selected {
+    background: grey;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+}

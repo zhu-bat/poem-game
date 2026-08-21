@@ -15,8 +15,15 @@ with app.app_context():
     db.create_all()
 
 @app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!'
+def title_screen():  # put application's code here
+    return render_template('title_screen.html')
+
+
+@app.route('/join')
+def room_join():
+    return render_template('room_join.html')
+
+
 
 @app.route('/words-test')
 def words_test():

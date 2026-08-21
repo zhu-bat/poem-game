@@ -59,6 +59,7 @@ class Player(db.Model):
     def update_score(self, n):
         self.score += n
 
+
     def to_json(self):
         return { "name": str(self.name),
                  "score": int(self.score),

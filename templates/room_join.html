@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='join.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<form action="/" class="join-form">
+  <label for="fname">ROOM CODE</label><br>
+  <input type="text" id="fname" name="fname"><br>
+  <label for="lname">NAME</label><br>
+  <input type="text" id="lname" name="lname"><br><br>
+  <input type="submit" value="Submit">
+</form> 
+
+{% endblock %}

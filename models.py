@@ -3,30 +3,16 @@ import random
 
 words = ["a", "an", "the", "and", "all", "am", "is"]
 
-class Game:
-
-    def __init__(self):
-        self.server = Server()
-
-    # def wait_for_players(self):
-    #     while (1):
-            
-
-
-
-
-# s.generate_words()
-
-#     Initialize a room and wait for players to
-#     join.
-
-#     def start_room():
     
 
 class Server:
 
     def __init__(self):
         self.players = []
+
+    # def wait_for_players(self):
+    #     while (1):
+    #         if player add player    
 
     def add_player(self, player):
         self.players.append(player)
@@ -45,31 +31,43 @@ class Server:
             xs.append(words[random.randint(0, len(words)-1)])
         return xs
 
+    def send_voting_poems(self, player):
+        return [p.poem for p in self.players if p != player]
 
-
-    
-#     def get_poems():
-#     def send_voting_poems():
-
-#     def 
+    def to_json(self):
+        return { "players": [p.to_json() for p in self.players] }
     
 
 
 
 class Player:
-    def __init__(self, name, server):
+    def __init__(self, name):
         self.name = name
-        self.server = server
+        self.score = 0
+        self.poem = None
+        self.vote = None
 
-    def get_words(self):
-        return self.server.generate_words();
-    
-#     def build_poem():
-    
-#     def send_poem():
 
-#     def get_voting_poems():
+    def get_words(self, server):
+        return server.generate_words()
     
-#     def vote():
+    def set_poem(self, str):
+        self.poem = str
     
-#     def update_score():
+    def get_voting_poems(self, server):
+        return server.send_voting_poems(self)
+ 
+    def set_vote(self, player):
+        self.vote = player
+
+    
+    def update_score(self, n):
+        self.score += n
+
+    def to_json(self):
+        return { "name": str(self.name), 
+                 "score": int(self.score),
+                 "poem": str(self.poem),
+                 "vote": str(self.vote)
+                 }    
+

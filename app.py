@@ -15,17 +15,16 @@ def hello_world():  # put application's code here
 def words_test():
     return render_template('words_test.html')
 
+
 @app.route('/bussy')
 def bussy():
-    game = Game()
+    server = Server()
     bussy = Player('Bussy')
-    game.server.add_player(bussy)
+    server.add_player(bussy)
     zubat = Player('Zubat')
-    game.server.add_player(zubat)
+    server.add_player(zubat)
 
-    return game.server.display_players()
-
-
+    return server.to_json()
 
 
 if __name__ == '__main__':

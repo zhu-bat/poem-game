@@ -1,3 +1,5 @@
+import random
+
 
 words = ["a", "an", "the", "and", "all", "am", "is"]
 
@@ -5,6 +7,12 @@ class Game:
 
     def __init__(self):
         self.server = Server()
+
+    # def wait_for_players(self):
+    #     while (1):
+            
+
+
 
 
 # s.generate_words()
@@ -38,7 +46,6 @@ class Server:
         return xs
 
 
-#     def send_words():
 
     
 #     def get_poems():
@@ -49,13 +56,13 @@ class Server:
 
 
 
-
-
 class Player:
-    def __init__(self, name):
+    def __init__(self, name, server):
         self.name = name
+        self.server = server
 
-#     def get_words():
+    def get_words(self):
+        return self.server.generate_words();
     
 #     def build_poem():
     

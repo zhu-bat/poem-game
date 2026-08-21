@@ -6,12 +6,13 @@
 
 {% block content %}
 <h1>Words Test</h1>
-{% for word in words %}
-<span style="padding: 1em; background: lightgray; border-radius: 1em;">{{ word }}</span>
-{% endfor %}
+<div id="poem-selector">
+    {% for word in words %}
+    <span class="word" onclick="addWord('{{word}}')">{{ word }}</span>
+    {% endfor %}
+</div>
 <br>
 <div id="poem-container" style="background: lightblue; height: 2em; border-radius: 1em;"></div>
-
 <script>
 
 </script>

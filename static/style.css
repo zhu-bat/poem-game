@@ -1,0 +1,9 @@
+.word {
+    padding: 1em;
+    background: lightgray;
+    border-radius: 1em;
+}
+
+.word.selected {
+    background: grey;
+}

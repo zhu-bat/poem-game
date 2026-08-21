@@ -1,11 +1,13 @@
 console.log("Hello world!");
 
+const selectionWords = ["hello", "world", "gup", "gulp", "guh", "1", "2", "3", "4", "5", "6", "7", "8"];
 const poemWords = [];
 
+const poemSelector = document.getElementById("poem-selector");
 const poemContainer = document.getElementById("poem-container");
 
 function addWord(word) {
-    if (word && poemWords.length < 10) {
+    if (poemWords.length < 10) {
         poemWords.push(word);
     } else {
         console.error("Cannot add word: either empty or poem already has 10 words.");
@@ -13,11 +15,41 @@ function addWord(word) {
     redrawPoem();
 }
 
+function removeWord(index) {
+    console.info(`Removing word at index: ${index}`);
+    if (index >= 0 && index < poemWords.length) {
+        poemWords.splice(index, 1);
+    } else {
+        console.error("Cannot remove word: index out of bounds.");
+    }
+    redrawPoem();
+}
+
 function redrawPoem() {
-    poemContainer.innerHTML = "";
-    poemWords.forEach(word => {
+    poemSelector.innerHTML = "";
+    selectionWords.forEach((word, index) => {
         const wordElement = document.createElement("span");
-        wordElement.textContent = word + " ";
+        wordElement.textContent = word;
+        wordElement.classList.add("word")
+        if (poemWords.includes(index) || poemWords.length >= 10) {
+            wordElement.classList.add("selected");
+        } else {
+            wordElement.addEventListener("click", () => {
+                addWord(index);
+            });
+        }
+        poemSelector.appendChild(wordElement);
+    });
+    poemContainer.innerHTML = "";
+    poemWords.forEach((word, index) => {
+        const wordElement = document.createElement("span");
+        wordElement.textContent = selectionWords[word];
+        wordElement.classList.add("word")
+        wordElement.addEventListener("click", () => {
+            removeWord(index);
+        });
         poemContainer.appendChild(wordElement);
     });
 }
+
+redrawPoem();

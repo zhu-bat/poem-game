@@ -11,6 +11,7 @@ words = ["a", "an", "the", "and", "all", "am", "is"]
 
 class Server(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
+    code: Mapped[str] = mapped_column(String(10), unique=True, default=lambda: str(random.randint(1000, 9999)))
     round: Mapped[int] = mapped_column(default=0)
 
     def get_players(self):

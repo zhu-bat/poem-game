@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
+from models import Server, Player, db
+
 bp = Blueprint('api', __name__, url_prefix='/api')
 
 @bp.route('/server', methods=['GET'])
@@ -31,11 +33,11 @@ def submit_poem():
 @bp.route('/join_game', methods=['POST'])
 def join_game():
     data = request.form
-    join_code = data.get('join_code')
-    server = Server.query.first()
+    join_code = str(data.get('code'))
+    server = Server.query.filter_by(code=join_code).first()
     if not server:
         return {'message': 'Invalid join code.'}, 400
-    player_name = data.get('player_name')
+    player_name = data.get('name')
 
     if player_name:
         player = Player(name=player_name, server=server.id)

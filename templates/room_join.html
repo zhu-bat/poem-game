@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<form action="/join-game" class="join-form">
+<form action="{{ url_for('api.join_game') }}" class="join-form" method="post">
   <label for="code">ROOM CODE</label><br>
   <input type="text" id="code" name="code"><br>
   <label for="name">NAME</label><br>

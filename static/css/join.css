@@ -1,4 +1,23 @@
 .join-form {
-    color: white;
-    
+    text-align:center;
 }
+
+.join-form label {
+
+    color: white; 
+    font-size: 36px;
+}
+
+.join-form input {
+    
+    font-size: 24px;
+
+}
+
+.join-form input[type="submit"] {
+    font-size: 48px;
+    margin:20px;
+    padding:10px 30px;
+
+}
+

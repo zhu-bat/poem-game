@@ -5,6 +5,7 @@ const poemWords = [];
 
 const poemSelector = document.getElementById("poem-selector");
 const poemContainer = document.getElementById("poem-container");
+const wordCounter = document.getElementById("word-counter");
 
 function addWord(word) {
     if (poemWords.length < 10) {
@@ -50,6 +51,7 @@ function redrawPoem() {
         });
         poemContainer.appendChild(wordElement);
     });
+    wordCounter.innerHTML = `${poemWords.length}/10 words`;
 }
 
 redrawPoem();

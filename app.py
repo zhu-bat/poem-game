@@ -12,14 +12,8 @@ def hello_world():  # put application's code here
 
 
 @app.route('/words-test')
-def words_test():  # put application's code here
-
-    s = Server("hello")
-
-    words = s.generate_words()
-    print(words)
-    return render_template('words_test.html', words=words)
-
+def words_test():
+    return render_template('words_test.html')
 
 @app.route('/bussy')
 def bussy():

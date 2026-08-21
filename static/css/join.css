@@ -3,13 +3,11 @@
 }
 
 .join-form label {
-
-    color: white; 
     font-size: 36px;
 }
 
 .join-form input {
-    
+    color: black; 
     font-size: 24px;
 
 }

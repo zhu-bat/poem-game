@@ -51,8 +51,17 @@ def game():
     if not server or not player:
         return redirect(url_for('room_join'))
 
+    is_vip = player.is_vip()
+    if is_vip:
+        if server.phase == "writing" and server.all_poems_submitted():
+            server.phase = "voting"
+            db.session.commit()
+        if server.phase == "voting" and server.all_votes_submitted():
+            server.phase = "results"
+            db.session.commit()
+
     if server.phase == "pregame":
-        return render_template('player/pregame_waiting.html', player=player_id)
+        return render_template('player/pregame_waiting.html', player=player_id, is_vip=is_vip)
     if server.phase == "writing" and not player.poem_submitted():
         return render_template('player/words_test.html', player=player_id)
     if server.phase == "writing":

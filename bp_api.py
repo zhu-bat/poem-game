@@ -1,6 +1,6 @@
 from calendar import error
 
-from flask import Flask, render_template, request, Blueprint, session, redirect, url_for, flash
+from flask import Flask, render_template, request, Blueprint, session, redirect, url_for, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
@@ -58,13 +58,35 @@ def join_game():
         return redirect(url_for('room_join'))
     player_name = data.get('name')
 
+
     if player_name:
         player = Player(name=player_name, server=server.id)
         db.session.add(player)
         db.session.commit()
+        vip = server.get_vip()
         session['connected_server'] = server.id
         session['player'] = player.id
         return redirect(url_for('game'))
     else:
         flash("Player name is required", "error")
         return redirect(url_for('room_join'))
+
+
+@bp.route('/start-game')
+def start_game():
+    connected_server = session.get('connected_server')
+    player_id = session.get('player')
+    if not connected_server or not player_id:
+        return abort(400, description="No server or player in session.")
+    server = Server.query.get(connected_server)
+    player = Player.query.get(player_id)
+    if not server or not player:
+        return abort(400, description="Invalid server or player.")
+    is_vip = player.is_vip()
+    if not is_vip:
+        return abort(403, description="Only the VIP can start the game.")
+    if server.phase != "pregame":
+        return abort(400, description="Game has already started.")
+    server.phase = "writing"
+    db.session.commit()
+    return redirect(url_for('game'))

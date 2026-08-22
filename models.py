@@ -47,6 +47,17 @@ class Server(db.Model):
     def all_votes_submitted(self):
         return all([p.vote_submitted() for p in self.get_players()])
 
+    def get_vip(self):
+        vip = Player.query.filter_by(server=self.id, vip=True).first()
+        if not vip:
+            new_vip = Player.query.filter_by(server=self.id).first()
+            if not new_vip:
+                return None
+            new_vip.set_vip(True)
+            db.session.commit()
+            vip = new_vip
+        return vip
+
     def to_json(self):
         return {
             "id": self.id,
@@ -55,7 +66,8 @@ class Server(db.Model):
             "phase": self.phase,
             "players": {p.id: p.to_json() for p in self.get_players()},
             "all_poems_submitted": self.all_poems_submitted(),
-            "all_votes_submitted": self.all_votes_submitted()
+            "all_votes_submitted": self.all_votes_submitted(),
+            "vip": self.get_vip().to_json() if self.get_vip() else None
         }
 
 
@@ -63,6 +75,7 @@ class Player(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     server: Mapped[int] = mapped_column(db.ForeignKey(Server.id))
     name: Mapped[str] = mapped_column(String(20))
+    vip: Mapped[bool] = mapped_column(default=False)
     score: Mapped[int] = mapped_column(default=0)
     poem: Mapped[str] = mapped_column(String(500), nullable=True, default=None)
     vote: Mapped[int] = mapped_column(nullable=True, default=None)
@@ -88,12 +101,19 @@ class Player(db.Model):
     def vote_submitted(self):
         return self.vote is not None
 
+    def set_vip(self, is_vip):
+        self.vip = is_vip
+
+    def is_vip(self):
+        return self.vip
+
 
     def to_json(self):
-        return { "name": str(self.name),
-                 "score": int(self.score),
-                 "poem": str(self.poem),
-                 "vote": str(self.vote),
+        return { "name": self.name,
+                 "vip": self.vip,
+                 "score": self.score,
+                 "poem": self.poem,
+                 "vote": self.vote,
                  "poem_submitted": self.poem_submitted(),
                  "vote_submitted": self.vote_submitted()
                  }

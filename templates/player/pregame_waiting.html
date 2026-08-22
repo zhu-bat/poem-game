@@ -6,4 +6,10 @@
 
 {% block content %}
 Wait for the game to begin!
+{% if is_vip %}
+<a href="{{ url_for('api.start_game') }}">Start game</a>
+{% endif %}
+{% endblock %}
+{% block body_extra %}
+<script defer>waitForPhase('writing');</script>
 {% endblock %}

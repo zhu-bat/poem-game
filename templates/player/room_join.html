@@ -8,9 +8,12 @@
 
 <form action="{{ url_for('api.join_game') }}" class="join-form" method="post">
   <label for="code">Room code</label><br>
-  <input type="text" id="code" name="code" {% if code %}value="{{ code }}"{% endif %}><br>
+  <input type="text" id="code" name="code"
+         inputmode="numeric"
+         maxlength="4"
+         {% if code %}value="{{ code }}"{% endif %}><br>
   <label for="name">Name</label><br>
-  <input type="text" id="name" name="name"><br><br>
+  <input type="text" id="name" name="name" maxlength="20"><br><br>
   <input type="submit" value="Join room">
 </form> 
 

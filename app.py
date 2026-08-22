@@ -3,6 +3,7 @@ from flask import render_template, url_for, redirect, session, request
 from bp_api import bp as bp_api
 from models import app, db, Server, Player
 
+
 app.register_blueprint(bp_api)
 
 
@@ -25,6 +26,7 @@ def words_test():
 @app.route('/create')
 def create():
     server = Server()
+    server.set_phase("pregame")
     db.session.add(server)
     db.session.commit()
     return redirect(url_for('room_join', code=server.code))
@@ -45,10 +47,10 @@ def game():
     is_vip = player.is_vip()
     if is_vip:
         if server.phase == "writing" and server.all_poems_submitted():
-            server.phase = "voting"
+            server.set_phase("voting")
             db.session.commit()
         if server.phase == "voting" and server.all_votes_submitted():
-            server.phase = "results"
+            server.set_phase("results")
             db.session.commit()
 
     if server.phase == "pregame":

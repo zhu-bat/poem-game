@@ -1,5 +1,6 @@
 import enum
 import random
+import time
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -10,6 +11,10 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///poem_game.db'
 app.secret_key = 'thisisagoodsecretkey'
 db = SQLAlchemy(app)
+
+WRITING_TIMELIMIT = 120
+VOTING_TIMELIMIT = 30
+EMPTY_TIMELIMIT = 600
 
 words = ["a", "an", "the", "and", "all", "am", "is"]
 
@@ -25,6 +30,7 @@ class Server(db.Model):
     code: Mapped[str] = mapped_column(String(10), unique=True, default=lambda: str(random.randint(1000, 9999)))
     phase: Mapped[str] = mapped_column(default=GamePhase.PREGAME.value)
     round: Mapped[int] = mapped_column(default=0)
+    phase_end: Mapped[int] = mapped_column(default=0)
 
     def get_players(self):
         return Player.query.filter_by(server=self.id).all()
@@ -67,7 +73,18 @@ class Server(db.Model):
             p.poem = None
             p.vote = None
         self.round += 1
-        self.phase = "writing"
+        self.set_phase("writing")
+        db.session.commit()
+
+    def set_phase(self, phase):
+        self.phase = phase
+        match phase:
+            case "writing":
+                self.phase_end = int(time.time()) + WRITING_TIMELIMIT
+            case "voting":
+                self.phase_end = int(time.time()) + VOTING_TIMELIMIT
+            case _:
+                self.phase_end = int(time.time()) + EMPTY_TIMELIMIT
         db.session.commit()
 
     def to_json(self):
@@ -76,6 +93,7 @@ class Server(db.Model):
             "code": self.code,
             "round": self.round,
             "phase": self.phase,
+            "phase_end": self.phase_end,
             "players": {p.id: p.to_json() for p in self.get_players()},
             "all_poems_submitted": self.all_poems_submitted(),
             "all_votes_submitted": self.all_votes_submitted(),

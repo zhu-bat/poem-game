@@ -1,11 +1,15 @@
 import enum
 import random
 
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app import db
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///poem_game.db'
+app.secret_key = 'thisisagoodsecretkey'
+db = SQLAlchemy(app)
 
 words = ["a", "an", "the", "and", "all", "am", "is"]
 
@@ -125,3 +129,6 @@ class Player(db.Model):
                  "poem_submitted": self.poem_submitted(),
                  "vote_submitted": self.vote_submitted()
                  }
+
+with app.app_context():
+    db.create_all()

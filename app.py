@@ -1,24 +1,10 @@
-import time
+from flask import render_template, url_for, redirect, session
 
-from flask import Flask, render_template, request, url_for, redirect, session
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
-
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///poem_game.db'
-app.secret_key = 'thisisagoodsecretkey'
-db = SQLAlchemy(app)
-
-
-from models import Server, Player
 from bp_api import bp as bp_api
-
-with app.app_context():
-    db.create_all()
+from models import app, db, Server, Player
 
 app.register_blueprint(bp_api)
+
 
 @app.route('/')
 def title_screen():  # put application's code here
@@ -28,6 +14,7 @@ def title_screen():  # put application's code here
 @app.route('/join')
 def room_join():
     return render_template('player/room_join.html')
+
 
 @app.route('/words-test')
 def words_test():
@@ -40,6 +27,7 @@ def test_create():
     db.session.add(server)
     db.session.commit()
     return redirect(url_for('room_join'))
+
 
 @app.route('/game')
 def game():
@@ -82,6 +70,7 @@ def clear():
     session.clear()
     return redirect(url_for('room_join'))
 
+
 @app.route('/bussy')
 def bussy():
     server = Server()
@@ -99,5 +88,4 @@ def bussy():
 
 
 if __name__ == '__main__':
-
     app.run()

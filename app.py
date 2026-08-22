@@ -81,7 +81,7 @@ def game():
                                                                                 phase="results")
     if server.phase == "results":
         
-        return render_template("player/results.html", player=player_id, server=server, is_vip=is_vip)
+        return render_template("player/results.html", player=player, server=server, is_vip=is_vip)
 
     return render_template('game.html', server=server.to_json())
 

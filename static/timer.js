@@ -2,6 +2,9 @@ const timerElement = document.getElementById("timer");
 
 function startTimer(endTime) {
     const intervalId = setInterval(() => {
+        if (!endTime) {
+            return;
+        }
         const currentTime = Math.floor(Date.now() / 1000);
         const timeRemaining = endTime - currentTime;
         console.log(`Time remaining: ${timeRemaining}s`);

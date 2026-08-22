@@ -90,16 +90,18 @@ class Server(db.Model):
 
     # Assume voting phase has finished
     def get_num_votes(self, player):
-        num_votes = 0
-        for p in self.get_players():
-            # Assume a player can't vote for themselves
-            if p.vote == player.id:
-                num_votes += 1
-        return num_votes        
+        return sum([p.vote == player.id for p in self.get_players()])
 
     def update_score(self):
+        all_scores = sorted([self.get_num_votes(p) for p in self.get_players()], reverse=True)
         for p in self.get_players():
-            p.score += self.get_num_votes(p) * 250
+            score = self.get_num_votes(p) * 250
+            p.score += score
+            if score >= all_scores[(len(all_scores)//3) - 1]:
+                # Save poem
+                poem = Poem(player=p.id, server=self.id, content=p.poem, score=score)
+                db.session.add(poem)
+        db.session.commit()
 
     def get_players_ranked(self):
         return sorted(self.get_players(), key=lambda p: p.score)
@@ -172,6 +174,13 @@ class Player(db.Model):
                  "poem_submitted": self.poem_submitted(),
                  "vote_submitted": self.vote_submitted()
                  }
+
+class Poem(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    server: Mapped[int] = mapped_column(db.ForeignKey(Server.id))
+    player: Mapped[int] = mapped_column(db.ForeignKey(Player.id))
+    content: Mapped[str] = mapped_column(String(500))
+    score: Mapped[int] = mapped_column(default=0)
 
 with app.app_context():
     db.create_all()

@@ -1,3 +1,5 @@
+import time
+
 from flask import render_template, url_for, redirect, session, request
 
 from bp_api import bp as bp_api
@@ -53,19 +55,32 @@ def game():
             server.set_phase("results")
             db.session.commit()
 
+        if server.phase == "writing" and time.time() > server.phase_end:
+            server.set_phase("voting")
+            db.session.commit()
+        if server.phase == "voting" and time.time() > server.phase_end:
+            server.set_phase("results")
+            db.session.commit()
+
     if server.phase == "pregame":
-        return render_template('player/pregame_waiting.html', player=player_id, server=server, is_vip=is_vip)
+        return render_template('player/pregame_waiting.html', player=player, server=server,
+                                                                                is_vip=is_vip)
     if server.phase == "writing" and not player.poem_submitted():
-        return render_template('player/words_test.html', player=player_id)
+        return render_template('player/words_test.html', player=player, server=server)
+
     if server.phase == "writing":
-        return render_template("player/ingame_waiting.html", phase="voting")
+        return render_template("player/ingame_waiting.html", player=player, server=server,
+                                                                                phase="voting")
     if server.phase == "voting" and not player.vote_submitted():
-        return render_template("player/voting_test.html", player=player_id)
+        return render_template("player/voting_test.html", player=player, server=server)
+
     if server.phase == "voting":
-        return render_template("player/ingame_waiting.html", phase="results")
+        return render_template("player/ingame_waiting.html", player=player, server=server,
+                                                                                phase="results")
     if server.phase == "results":
         server.update_score()
         return render_template("player/results.html", player=player_id, server=server, is_vip=is_vip)
+
     return render_template('game.html', server=server.to_json())
 
 

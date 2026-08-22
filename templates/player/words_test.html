@@ -2,6 +2,7 @@
 
 {% block head_extra %}
     <script src="{{ url_for('static', filename='poem_builder.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='timer.js') }}" defer onload="startTimer('{{ server.phase_end }}')"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/words.css') }}">
 {% endblock %}
 
@@ -15,10 +16,7 @@
     <span class="word" onclick="addWord('{{word}}')">{{ word }}</span>
     {% endfor %}
 </div>
-<div class="submit" id="submit-button" onclick="clearPoem()">Clear</div>
-<div class="submit" id="submit-button" onclick="submitPoem('{{ player }}')">Submit</div>
-<br>
-<script>
+<div class="clear" id="clear-button" onclick="clearPoem()">Clear</div>
+<div class="submit" id="submit-button" onclick="submitPoem('{{ player.id }}')">Submit</div>
 
-</script>
 {% endblock %}

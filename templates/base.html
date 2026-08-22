@@ -9,8 +9,19 @@
     {% block head_extra %}{% endblock %}
   </head>
 
-
   <body>
+    <div class="header-bar">
+      {% if server %}
+      <div class="header-join-code"><div>Join:</div><div>{{ server.code }}</div></div>
+      {% endif %}
+      <div id="timer" class="header-timer"></div>
+      {% if player %}
+      <div class="header-player">
+        <div class="player-name">{{ player.name }}</div>
+        <div class="player-score">{{ player.score }}</div>
+      </div>
+      {% endif %}
+    </div>
     <h1>Poem Game</h1>
       {% with messages = get_flashed_messages() %}
       {% if messages %}

@@ -1,21 +1,17 @@
 {% extends 'base.html' %}
 
 {% block head_extra %}
-<script src="{{ url_for('static', filename='game_waiting.js') }}"></script>
+<script src="{{ url_for('static', filename='game_waiting.js') }}" defer onload="waitForPhase('writing');"></script>
 {% endblock %}
 
 {% block header %}<h1>Waiting for players...</h1>{% endblock %}
 
 {% block content %}
 
-
-
 Wait for the game to begin!
 <h1>Join: {{ server.code }}</h1>
+<ul id="player-list"></ul>
 {% if is_vip %}
 <a href="{{ url_for('api.continue_game') }}">Start game</a>
 {% endif %}
-{% endblock %}
-{% block body_extra %}
-<script defer>waitForPhase('writing');</script>
 {% endblock %}

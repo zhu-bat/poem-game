@@ -1,14 +1,25 @@
 {% extends 'base.html' %}
 
 {% block head_extra %}
-<script src="{{ url_for('static', filename='game_waiting.js') }}"></script>
+<script src="{{ url_for('static', filename='game_waiting.js') }}" defer onload="waitForPhase('{{ phase }}')"></script>
+<script src="{{ url_for('static', filename='timer.js') }}" defer onload="startTimer('{{ server.phase_end }}')"></script>
 {% endblock %}
 
 {% block header %}<h1>Waiting for other players...</h1>{% endblock %}
 
 {% block content %}
 Wait for everyone to finish!
-{% endblock %}
-{% block body_extra %}
-<script defer>waitForPhase('{{ phase }}');</script>
+<ul id="player-list">
+    {% for p in server.get_players() %}
+    <div>
+        {% if phase == 'voting' %}
+        <span>{{ '✔' if p.poem_submitted() else '✘' }}</span>
+        {% endif %}
+        {% if phase == 'results' %}
+        <span>{{ '✔' if p.vote_submitted() else '✘' }}</span>
+        {% endif %}
+        <span>{{ p.name }}</span>
+    </div>
+    {% endfor %}
+</ul>
 {% endblock %}

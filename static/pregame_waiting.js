@@ -24,12 +24,12 @@ function waitForPhase(phase, player) {
         let isVip = data['players'][player]['vip'];
         let playerCount = Object.values(data['players']).length;
 
-        if (!isVip) {
-            startGameElement.style.display = 'none';
-            startHintElement.textContent = "Waiting for VIP to start game...";
-        } else if (playerCount < 3) {
+        if (playerCount < 3) {
             startGameElement.style.display = 'none';
             startHintElement.textContent = "Waiting for more players to join...";
+        } else if (!isVip) {
+            startGameElement.style.display = 'none';
+            startHintElement.textContent = "Waiting for VIP to start game...";
         } else {
             startGameElement.style.display = 'block';
             startHintElement.textContent = "Press Start game when everyone is ready!";

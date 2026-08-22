@@ -7,7 +7,7 @@ const getJSON = async url => {
   return data; // returns a promise, which resolves to this data value
 }
 
-const selectionWords = ["hello", "world", "gup", "gulp", "guh", "1", "2", "3", "4", "5", "6", "7", "8"];
+let selectionWords = [];
 const poemWords = [];
 
 const poemSelector = document.getElementById("poem-selector");
@@ -100,4 +100,10 @@ function submitPoem(player) {
       });
 }
 
-redrawPoem();
+getJSON("/api/words").then(data => {
+    selectionWords = Object.values(data["words"]);
+    console.log(data);
+    redrawPoem();
+}).catch(error => {
+    console.error(error);
+});

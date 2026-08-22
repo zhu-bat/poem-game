@@ -1,0 +1,44 @@
+.poem-selector, .poem-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em;
+    height: 5em;
+    gap: 0.5em;
+}
+
+.word {
+    padding: 1em;
+    background: rgb(46, 47, 49);
+    border-radius: 1em;
+}
+
+.poem-selector .word:hover {
+    outline: 1px solid white;
+    cursor: pointer;
+}
+
+.poem-container .word:hover {
+    outline: 1px solid red;
+    background: rgb(30, 0, 0);
+    cursor: pointer;
+}
+
+.word.selected {
+    opacity: 30%;
+}
+
+.word.selected:hover {
+    outline: none;
+    cursor:not-allowed;
+}
+
+.submit {
+    font-size: 36px;
+    color: gray;
+    text-decoration: none;
+}
+
+.submit:hover {
+    color: white;
+    cursor: pointer;
+}

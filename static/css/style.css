@@ -41,25 +41,6 @@ h1 {
 }
 
 
-.poem-selector, .poem-container {
-    background: lightblue;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0.5em;
-    min-height: 4em;
-    gap: 0.5em;
-}
-
-.word {
-    padding: 1em;
-    background: lightgray;
-    border-radius: 1em;
-}
-
-.word.selected {
-    background: grey;
-}
-
 .content {
     display: flex;
     flex-direction: column;

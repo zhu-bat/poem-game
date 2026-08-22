@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
 
 {% block head_extra %}
-<script src="{{ url_for('static', filename='poem_builder.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='poem_builder.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/words.css') }}">
 {% endblock %}
 
 {% block content %}
-<h1>Words Test</h1>
 <div id="poem-container" class="poem-container"></div>
+
 <div id="word-counter">0/10 words</div>
+
 <div id="poem-selector" class="poem-selector">
     {% for word in words %}
     <span class="word" onclick="addWord('{{word}}')">{{ word }}</span>
     {% endfor %}
 </div>
-<div id="submit-button" onclick="submitPoem('{{ player }}')">Submit</div>
+<div class="submit" id="submit-button" onclick="submitPoem('{{ player }}')">Submit</div>
 <br>
 <script>
 

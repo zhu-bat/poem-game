@@ -6,7 +6,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/words.css') }}">
 {% endblock %}
 
+{% block header %}<h1>Compose poem</h1>{% endblock %}
+
 {% block content %}
+
 <div id="poem-container" class="poem-container"></div>
 
 <div id="word-counter">0/10 words</div>

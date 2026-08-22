@@ -4,7 +4,12 @@
 <script src="{{ url_for('static', filename='game_waiting.js') }}"></script>
 {% endblock %}
 
+{% block header %}<h1>Waiting for players...</h1>{% endblock %}
+
 {% block content %}
+
+
+
 Wait for the game to begin!
 <h1>Join: {{ server.code }}</h1>
 {% if is_vip %}

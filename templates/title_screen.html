@@ -4,7 +4,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
 {% endblock %}
 
+
+{% block header %}<h1>Poem Game</h1>{% endblock %}
+
 {% block content %}
+
 
 <a href="{{ url_for('create') }}">Host game</a>
 <a href="{{ url_for('room_join') }}">Join game</a>

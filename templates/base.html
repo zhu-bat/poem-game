@@ -22,7 +22,7 @@
       </div>
       {% endif %}
     </div>
-    <h1>Poem Game</h1>
+      {% block header %}{% endblock %}
       {% with messages = get_flashed_messages() %}
       {% if messages %}
       <ul class=flashes>

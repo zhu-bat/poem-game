@@ -4,7 +4,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/join.css') }}">
 {% endblock %}
 
+{% block header %}<h1>Join</h1>{% endblock %}
+
 {% block content %}
+
 
 <form action="{{ url_for('api.join_game') }}" class="join-form" method="post">
   <label for="code">Room code</label><br>

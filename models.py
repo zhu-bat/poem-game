@@ -102,6 +102,9 @@ class Server(db.Model):
             continue
             #p.score += self.get_num_votes(p) * 250
 
+    def get_players_ranked(self):
+        return sorted(self.get_players(), key=lambda p: p.score)
+
     def to_json(self):
         return {
             "id": self.id,

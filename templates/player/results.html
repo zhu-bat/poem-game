@@ -1,17 +1,29 @@
 {% extends 'base.html' %}
 
 {% block head_extra %}
+
 <script src="{{ url_for('static', filename='game_waiting.js') }}"></script>
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
 {% endblock %}
 
+
+{% block header %}<h1>Leaderboard</h1>{% endblock %}
+
+
 {% block content %}
-Leaderboard
 
-{% for p in server.get_players() %}
 
-<p>{{ p.name }}......{{ p.score }}</p>
+<div class="leaderboard">
 
-{% endfor %}
+    {% for p in server.get_players_ranked() %}
+    <span>{{ p.name }}.......{{ p.score }}</span>
+    {% endfor %}
+
+</div>
+
+
+
+
 
 {% if is_vip %}
 <a href="{{ url_for('api.continue_game') }}">Start next round</a>

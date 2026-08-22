@@ -52,6 +52,7 @@ def game():
             server.set_phase("voting")
             db.session.commit()
         if server.phase == "voting" and server.all_votes_submitted():
+            server.update_score()
             server.set_phase("results")
             db.session.commit()
 
@@ -59,6 +60,7 @@ def game():
             server.set_phase("voting")
             db.session.commit()
         if server.phase == "voting" and time.time() > server.phase_end:
+            server.update_score()
             server.set_phase("results")
             db.session.commit()
 
@@ -78,7 +80,7 @@ def game():
         return render_template("player/ingame_waiting.html", player=player, server=server,
                                                                                 phase="results")
     if server.phase == "results":
-        server.update_score()
+        
         return render_template("player/results.html", player=player_id, server=server, is_vip=is_vip)
 
     return render_template('game.html', server=server.to_json())

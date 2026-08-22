@@ -93,14 +93,13 @@ class Server(db.Model):
         num_votes = 0
         for p in self.get_players():
             # Assume a player can't vote for themselves
-            if p.vote.id == player.id:
+            if p.vote == player.id:
                 num_votes += 1
         return num_votes        
 
     def update_score(self):
         for p in self.get_players():
-            continue
-            #p.score += self.get_num_votes(p) * 250
+            p.score += self.get_num_votes(p) * 250
 
     def get_players_ranked(self):
         return sorted(self.get_players(), key=lambda p: p.score)

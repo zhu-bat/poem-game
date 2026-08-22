@@ -87,6 +87,21 @@ class Server(db.Model):
                 self.phase_end = int(time.time()) + EMPTY_TIMELIMIT
         db.session.commit()
 
+
+    # Assume voting phase has finished
+    def get_num_votes(self, player):
+        num_votes = 0
+        for p in self.get_players():
+            # Assume a player can't vote for themselves
+            if p.vote.id == player.id:
+                num_votes += 1
+        return num_votes        
+
+    def update_score(self):
+        for p in self.get_players():
+            continue
+            #p.score += self.get_num_votes(p) * 250
+
     def to_json(self):
         return {
             "id": self.id,

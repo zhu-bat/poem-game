@@ -5,7 +5,14 @@
 {% endblock %}
 
 {% block content %}
-Look at the results!
+Leaderboard
+
+{% for p in server.get_players() %}
+
+<p>{{ p.name }}......{{ p.score }}</p>
+
+{% endfor %}
+
 {% if is_vip %}
 <a href="{{ url_for('api.continue_game') }}">Start next round</a>
 {% endif %}

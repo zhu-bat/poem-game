@@ -32,11 +32,11 @@ body {
     background-color: rgb(16, 16, 24);
     font-family: "Space Mono","Space Mono Fallback";
     color: white;
+    text-align: center;
 }
 
 h1 {
     font-size: 60px;
-    text-align: center;
     font-family: "Space Mono", monospace;
 }
 
@@ -63,4 +63,5 @@ h1 {
 .content {
     display: flex;
     flex-direction: column;
+    align-items: center;
 }

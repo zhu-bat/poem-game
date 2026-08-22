@@ -1,21 +1,33 @@
+
 .join-form {
-    text-align:center;
+    display: flex;
+    flex-direction: column;
+    width: 330px;
 }
 
 .join-form label {
+    text-align: left;
     font-size: 36px;
 }
 
 .join-form input {
     color: black; 
     font-size: 24px;
-
 }
 
 .join-form input[type="submit"] {
     font-size: 48px;
-    margin:20px;
-    padding:10px 30px;
-
+    margin:50px 0px;
+    padding:5px;
 }
 
+a {
+    color: gray;
+    text-decoration: none;
+    transition-duration: 0.2s;
+}
+
+a:hover {
+    color: white;
+    text-decoration: underline; 
+}

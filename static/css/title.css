@@ -1,0 +1,13 @@
+a {
+    font-size: 36px;
+    color: gray;
+    text-decoration: none;
+    transition-duration: 0.2s;
+    letter-spacing: 2px;
+    margin: 10px;
+}
+
+a:hover {
+    color: white;
+    text-decoration: underline;
+}

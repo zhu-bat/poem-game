@@ -56,11 +56,11 @@ def game():
     if server.phase == "writing" and not player.poem_submitted():
         return render_template('player/words_test.html', player=player_id)
     if server.phase == "writing":
-        return render_template("player/ingame_waiting.html", player=player_id)
+        return render_template("player/ingame_waiting.html", phase="voting")
     if server.phase == "voting" and not player.vote_submitted():
         return render_template("player/voting_test.html", player=player_id)
     if server.phase == "voting":
-        return render_template("player/ingame_waiting.html", player=player_id)
+        return render_template("player/ingame_waiting.html", phase="results")
     return render_template('game.html', server=server.to_json())
 
 

@@ -7,13 +7,19 @@ const getJSON = async url => {
   return data; // returns a promise, which resolves to this data value
 }
 
-const intervalId = setInterval(() => {
-  console.log("This runs every 5 seconds");
-  getJSON("/api/server")
-    .then(data => {
-      console.log(data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-}, 5000);
+function waitForPhase(phase) {
+  const intervalId = setInterval(() => {
+    console.log(`Waiting for phase ${phase}`);
+    getJSON("/api/server")
+      .then(data => {
+        console.log(data);
+        if (data['phase'] === phase) {
+          clearInterval(intervalId);
+          window.location.href = "/game";
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, 3000);
+}

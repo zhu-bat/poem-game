@@ -1,7 +1,13 @@
-console.log("Hello world!");
+const getJSON = async url => {
+  const response = await fetch(url);
+  if(!response.ok) // check if response worked (no 404 errors etc...)
+    throw new Error(response.statusText);
 
-const poems = ["Hello World!", "GUP!!!!!!", "This is a poem."];
+  const data = response.json(); // get JSON from the response
+  return data; // returns a promise, which resolves to this data value
+}
 
+let poems = {};
 let selectedPoem = null;
 
 const poemsContainer = document.getElementById("poems-container");
@@ -9,7 +15,9 @@ const submitButton = document.getElementById("submit-button");
 
 function redrawPoems() {
     poemsContainer.innerHTML = "";
-    poems.forEach((poem, index) => {
+    // Iterate over key values
+    Object.entries(poems['poems']).forEach(([index, poem]) => {
+        console.log(`Redrawing poem at index ${index}: ${poem}`);
         const poemElement = document.createElement("div");
         poemElement.textContent = poem;
         poemElement.classList.add("poem");
@@ -50,4 +58,10 @@ function submitVote(player) {
       });
 }
 
-redrawPoems();
+getJSON("/api/poems").then(data => {
+    poems = data;
+    console.log(data);
+    redrawPoems();
+}).catch(error => {
+    console.error(error);
+});

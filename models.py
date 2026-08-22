@@ -39,7 +39,7 @@ class Server(db.Model):
         return xs
 
     def send_voting_poems(self, player):
-        return [p.poem for p in self.get_players() if p != player]
+        return {p.id: p.poem for p in self.get_players() if p != player}
 
     def all_poems_submitted(self):
         return all([p.poem_submitted() for p in self.get_players()])

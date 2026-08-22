@@ -18,6 +18,20 @@ def get_server_data():
     else:
         return {}
 
+@bp.route('/poems', methods=['GET'])
+def get_poem_data():
+    connected_server = session.get('connected_server')
+    player_id = session.get('player')
+    if not connected_server or not player_id:
+        return abort(400, description="No server or player in session.")
+    server = Server.query.get(connected_server)
+    player = Player.query.get(player_id)
+    if not server or not player:
+        return abort(400, description="Invalid server or player.")
+    player.get_voting_poems(server)
+    return {'poems': player.get_voting_poems(server)}
+
+
 @bp.route('/submit-poem', methods=['POST'])
 def submit_poem():
     data = request.get_json()

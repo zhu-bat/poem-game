@@ -34,6 +34,12 @@ function removeWord(index) {
     redrawPoem();
 }
 
+function clearPoem() {
+     while (poemWords.length > 0) {
+        removeWord(0)
+    }
+}
+
 function redrawPoem() {
     poemSelector.innerHTML = "";
     selectionWords.forEach((word, index) => {

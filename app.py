@@ -69,11 +69,15 @@ def game():
         if server.phase == "writing" and (server.all_poems_submitted() or time.time() > server.phase_end):
             server.set_phase("voting")
             db.session.commit()
-        if server.phase == "voting" and server.round <= 2 and (server.all_votes_submitted() or time.time() > server.phase_end):
-            server.update_score()
-            server.set_phase("results")
-            db.session.commit()
-
+        if server.phase == "voting" and (server.all_votes_submitted() or time.time() > server.phase_end):
+            if server.round <= 2:
+                server.update_score()
+                server.set_phase("results")
+                db.session.commit()
+            else:   # end of round 3
+                server.update_score()
+                server.set_phase("endgame")
+                db.session.commit()
 
     if server.phase == "pregame":
         return render_template('player/pregame_waiting.html', player=player, server=server,

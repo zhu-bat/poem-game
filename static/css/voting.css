@@ -1,0 +1,29 @@
+
+.poem-button {
+    padding: 1em;
+    background: rgb(46, 47, 49);
+    border-radius: 1em;
+}
+
+.poem-button:hover {
+    outline: 1px solid white;
+    cursor: pointer;
+}
+
+.poem-button.selected {
+    outline: 1px solid white;
+    cursor: pointer;
+}
+
+
+.vote-button {
+    font-size: 36px;
+    color: gray;
+    text-decoration: none;
+}
+
+.vote-button:hover {
+    color: white;
+    cursor: pointer;
+    margin:20px;
+}

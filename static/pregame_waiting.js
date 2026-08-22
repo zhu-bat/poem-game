@@ -24,7 +24,7 @@ function waitForPhase(phase, player) {
         let isVip = data['players'][player]['vip'];
         let playerCount = Object.values(data['players']).length;
 
-        if (playerCount < 3) {
+        if (playerCount < 1) {
             startGameElement.style.display = 'none';
             startHintElement.textContent = "Waiting for more players to join...";
         } else if (!isVip) {

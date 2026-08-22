@@ -19,6 +19,7 @@ function redrawPoems() {
     Object.entries(poems['poems']).forEach(([index, poem]) => {
         console.log(`Redrawing poem at index ${index}: ${poem}`);
         const poemElement = document.createElement("div");
+        poemElement.classList.add('poem-button');
         poemElement.textContent = poem;
         poemElement.classList.add("poem");
         if (selectedPoem === index) {

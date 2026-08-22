@@ -2,7 +2,9 @@
 
 {% block head_extra %}
 <script src="{{ url_for('static', filename='voting.js') }}" defer></script>
-<script src="{{ url_for('static', filename='timer.js') }}" defer onload="startTimer('{{ server.phase_end }}')"></script>
+<!-- <script src="{{ url_for('static', filename='timer.js') }}" defer onload="startTimer('{{ server.phase_end }}')"></script> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/voting.css') }}">
+
 {% endblock %}
 
 
@@ -10,5 +12,5 @@
 {% block content %}
 
 <div id="poems-container" class="poems-container"></div>
-<div id="submit-button" onclick="submitVote('{{ player.id }}')">Submit</div>
+<div id="submit-button" class="vote-button" onclick="submitVote('{{ player.id }}')">Vote!</div>
 {% endblock %}

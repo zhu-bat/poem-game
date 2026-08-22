@@ -20,10 +20,11 @@
     font-size: 36px;
     color: gray;
     text-decoration: none;
+    margin:20px;
 }
 
 .vote-button:hover {
     color: white;
     cursor: pointer;
-    margin:20px;
+    
 }

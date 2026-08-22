@@ -73,7 +73,10 @@ class Server(db.Model):
             p.poem = None
             p.vote = None
         self.round += 1
-        self.set_phase("writing")
+        if (self.round <= 3):
+            self.set_phase("writing")
+        else:
+            self.set_phase("endgame")
         db.session.commit()
 
     def set_phase(self, phase):
@@ -95,7 +98,7 @@ class Server(db.Model):
     def update_score(self):
         all_scores = sorted([self.get_num_votes(p) for p in self.get_players()], reverse=True)
         for p in self.get_players():
-            score = self.get_num_votes(p) * 250
+            score = self.get_num_votes(p) * 250 * self.round
             p.score += score
             if score >= all_scores[(len(all_scores)//3) - 1]:
                 # Save poem

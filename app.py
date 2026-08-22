@@ -66,21 +66,14 @@ def game():
     server.get_vip()
     is_vip = player.is_vip()
     if is_vip:
-        if server.phase == "writing" and server.all_poems_submitted():
+        if server.phase == "writing" and (server.all_poems_submitted() or time.time() > server.phase_end):
             server.set_phase("voting")
             db.session.commit()
-        if server.phase == "voting" and server.all_votes_submitted():
+        if server.phase == "voting" and server.round <= 2 and (server.all_votes_submitted() or time.time() > server.phase_end):
             server.update_score()
             server.set_phase("results")
             db.session.commit()
 
-        if server.phase == "writing" and time.time() > server.phase_end:
-            server.set_phase("voting")
-            db.session.commit()
-        if server.phase == "voting" and time.time() > server.phase_end:
-            server.update_score()
-            server.set_phase("results")
-            db.session.commit()
 
     if server.phase == "pregame":
         return render_template('player/pregame_waiting.html', player=player, server=server,
@@ -100,6 +93,9 @@ def game():
     if server.phase == "results":
         
         return render_template("player/results.html", player=player, server=server, is_vip=is_vip)
+
+    if server.phase == "endgame":
+        return render_template("player/endgame.html", player=player_id, server=server, is_vip=is_vip)
 
     return render_template('game.html', server=server.to_json())
 

@@ -111,9 +111,9 @@ def continue_game():
     player = Player.query.get(player_id)
     if not server or not player:
         return abort(400, description="Invalid server or player.")
-    is_vip = player.is_vip()
-    if not is_vip:
-        return abort(403, description="Only the VIP can start the game.")
+    # is_vip = player.is_vip()
+    # if not is_vip:
+    #     return abort(403, description="Only the VIP can start the game.")
     if server.phase not in {"pregame", "results"}:
         return abort(400, description="Game has already started.")
     server.clear_round()

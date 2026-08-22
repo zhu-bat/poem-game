@@ -155,6 +155,14 @@ class Player(db.Model):
     def is_vip(self):
         return self.vip
 
+    def get_ranking(self, server):
+        current_rank = 1
+        sorted = server.get_players_ranked()
+        for i, p in enumerate(server.get_players_ranked()):
+            if i > 0 and p.score < sorted[i - 1].score:
+                current_rank = i + 1
+            if p.id == self.id:
+                return current_rank
 
     def to_json(self):
         return { "name": self.name,

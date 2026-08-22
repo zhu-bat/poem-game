@@ -16,9 +16,12 @@
 <div class="leaderboard">
 
     {% for p in server.get_players_ranked() %}
-    <span>{{ p.name }}.......{{ p.score }}</span>
+    <div class="row">
+        <span> {{ p.get_ranking(server) }}.</span>
+        <span> {{ p.name }}</span>
+        <span class="score"> {{ p.score }}</span>
+    </div>
     {% endfor %}
-
 </div>
 
 

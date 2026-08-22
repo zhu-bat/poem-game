@@ -1,4 +1,11 @@
-console.log("Hello world!");
+const getJSON = async url => {
+  const response = await fetch(url);
+  if(!response.ok) // check if response worked (no 404 errors etc...)
+    throw new Error(response.statusText);
+
+  const data = response.json(); // get JSON from the response
+  return data; // returns a promise, which resolves to this data value
+}
 
 const selectionWords = ["hello", "world", "gup", "gulp", "guh", "1", "2", "3", "4", "5", "6", "7", "8"];
 const poemWords = [];
@@ -80,8 +87,11 @@ function submitPoem(player) {
     }).then(response => response.json())
       .then(data => {
           console.log(data);
+          // Sleep 1000ms
+            setTimeout(() => {
+                window.location.href = "/game";
+            }, 1000);
       });
-    window.location.href = "/game";
 }
 
 redrawPoem();

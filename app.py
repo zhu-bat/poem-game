@@ -1,3 +1,4 @@
+import time
 
 from flask import Flask, render_template, request, url_for, redirect, session
 from flask_sqlalchemy import SQLAlchemy
@@ -51,6 +52,7 @@ def game():
     if not server or not player:
         return redirect(url_for('room_join'))
 
+    server.get_vip()
     is_vip = player.is_vip()
     if is_vip:
         if server.phase == "writing" and server.all_poems_submitted():
@@ -70,6 +72,8 @@ def game():
         return render_template("player/voting_test.html", player=player_id)
     if server.phase == "voting":
         return render_template("player/ingame_waiting.html", phase="results")
+    if server.phase == "results":
+        return render_template("player/results.html", player=player_id, server=server.to_json(), is_vip=is_vip)
     return render_template('game.html', server=server.to_json())
 
 

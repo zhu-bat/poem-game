@@ -17,6 +17,14 @@ function waitForPhase(phase) {
           clearInterval(intervalId);
           window.location.href = "/game";
         }
+        if (phase === 'voting' && data['all_poems_submitted']) {
+          clearInterval(intervalId);
+          window.location.href = "/game";
+        }
+        if (phase === 'results' && data['all_votes_submitted']) {
+          clearInterval(intervalId);
+          window.location.href = "/game";
+        }
       })
       .catch(error => {
         console.error(error);

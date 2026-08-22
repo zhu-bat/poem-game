@@ -43,8 +43,11 @@ function submitVote(player) {
     }).then(response => response.json())
       .then(data => {
           console.log(data);
+          // Sleep 1000ms
+            setTimeout(() => {
+                window.location.href = "/game";
+            }, 1000);
       });
-    window.location.href = "/game";
 }
 
 redrawPoems();

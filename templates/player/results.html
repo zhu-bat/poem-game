@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block content %}
-Wait for the game to begin!
+Look at the results!
 {% if is_vip %}
-<a href="{{ url_for('api.continue_game') }}">Start game</a>
+<a href="{{ url_for('api.continue_game') }}">Start next round</a>
 {% endif %}
 {% endblock %}
 {% block body_extra %}

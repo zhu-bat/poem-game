@@ -72,8 +72,8 @@ def join_game():
         return redirect(url_for('room_join'))
 
 
-@bp.route('/start-game')
-def start_game():
+@bp.route('/continue-game')
+def continue_game():
     connected_server = session.get('connected_server')
     player_id = session.get('player')
     if not connected_server or not player_id:
@@ -85,8 +85,7 @@ def start_game():
     is_vip = player.is_vip()
     if not is_vip:
         return abort(403, description="Only the VIP can start the game.")
-    if server.phase != "pregame":
+    if server.phase not in {"pregame", "results"}:
         return abort(400, description="Game has already started.")
-    server.phase = "writing"
-    db.session.commit()
+    server.clear_round()
     return redirect(url_for('game'))

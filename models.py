@@ -58,6 +58,14 @@ class Server(db.Model):
             vip = new_vip
         return vip
 
+    def clear_round(self):
+        for p in self.get_players():
+            p.poem = None
+            p.vote = None
+        self.round += 1
+        self.phase = "writing"
+        db.session.commit()
+
     def to_json(self):
         return {
             "id": self.id,

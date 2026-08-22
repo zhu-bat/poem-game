@@ -1,4 +1,4 @@
-from flask import render_template, url_for, redirect, session
+from flask import render_template, url_for, redirect, session, request
 
 from bp_api import bp as bp_api
 from models import app, db, Server, Player
@@ -13,7 +13,8 @@ def title_screen():  # put application's code here
 
 @app.route('/join')
 def room_join():
-    return render_template('player/room_join.html')
+    chode = request.args.get('code')
+    return render_template('player/room_join.html', code=chode)
 
 
 @app.route('/words-test')
@@ -21,12 +22,12 @@ def words_test():
     return render_template('player/words_test.html')
 
 
-@app.route('/test-create')
-def test_create():
+@app.route('/create')
+def create():
     server = Server()
     db.session.add(server)
     db.session.commit()
-    return redirect(url_for('room_join'))
+    return redirect(url_for('room_join', code=server.code))
 
 
 @app.route('/game')
@@ -51,7 +52,7 @@ def game():
             db.session.commit()
 
     if server.phase == "pregame":
-        return render_template('player/pregame_waiting.html', player=player_id, is_vip=is_vip)
+        return render_template('player/pregame_waiting.html', player=player_id, server=server, is_vip=is_vip)
     if server.phase == "writing" and not player.poem_submitted():
         return render_template('player/words_test.html', player=player_id)
     if server.phase == "writing":

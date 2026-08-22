@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<a>Host game</a>  
-<a href="/join">Join game</a>    
+<a href="{{ url_for('create') }}">Host game</a>
+<a href="{{ url_for('room_join') }}">Join game</a>
 
 {% endblock %}

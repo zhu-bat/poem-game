@@ -84,7 +84,7 @@ def join_game():
     server = Server.query.filter_by(code=join_code).first()
     if not server:
         flash("Invalid join code", "error")
-        return redirect(url_for('room_join'))
+        return redirect(url_for('room_join', code=join_code))
     player_name = data.get('name')
 
 
@@ -98,7 +98,7 @@ def join_game():
         return redirect(url_for('game'))
     else:
         flash("Player name is required", "error")
-        return redirect(url_for('room_join'))
+        return redirect(url_for('room_join', code=join_code))
 
 
 @bp.route('/continue-game')

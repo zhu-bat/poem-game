@@ -8,10 +8,19 @@
 
 {% block content %}
 
-Wait for the game to begin!
 <h1>Join: {{ server.code }}</h1>
-<ul id="player-list"></ul>
+<ul class="player-list" id="player-list"></ul>
+
+
+
+
 {% if is_vip %}
+<p>Press Start game when everyone is ready!</p>
 <a href="{{ url_for('api.continue_game') }}">Start game</a>
 {% endif %}
+
+{% if not is_vip %}
+<p>Waiting for VIP to start game...</p>
+{% endif %}
+
 {% endblock %}

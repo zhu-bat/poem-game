@@ -34,6 +34,24 @@ def create():
     return redirect(url_for('room_join', code=server.code))
 
 
+def cleanup_games():
+    # Clear old games only if they are on the results screen or pregame screen and have expired
+    # Clear players with no games
+    for server in Server.query.all():
+        print(server, server.phase, server.phase_end)
+        if server.phase in {'pregame', 'endgame', 'results'} and server.phase_end < time.time():
+            db.session.delete(server)
+        elif not server.get_players():
+            db.session.delete(server)
+    for player in Player.query.all():
+        print(player, player.server)
+        server = Server.query.get(player.server)
+        if not server:
+            print("No server")
+            db.session.delete(player)
+    db.session.commit()
+
+
 @app.route('/game')
 def game():
     connected_server = session.get('connected_server')
@@ -88,7 +106,14 @@ def game():
 
 @app.route('/clear')
 def clear():
+    player_id = session.get('player')
+    if player_id:
+        player = Player.query.get(player_id)
+        if player:
+            db.session.delete(player)
+            db.session.commit()
     session.clear()
+    cleanup_games()
     return redirect(url_for('room_join'))
 
 

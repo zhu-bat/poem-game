@@ -6,6 +6,7 @@ const poemWords = [];
 const poemSelector = document.getElementById("poem-selector");
 const poemContainer = document.getElementById("poem-container");
 const wordCounter = document.getElementById("word-counter");
+const submitButton = document.getElementById("submit-button");
 
 function addWord(word) {
     if (poemWords.length < 10) {
@@ -52,9 +53,14 @@ function redrawPoem() {
         poemContainer.appendChild(wordElement);
     });
     wordCounter.innerHTML = `${poemWords.length}/10 words`;
+    if (poemWords.length >= 1){
+        submitButton.disabled = false;
+    } else {
+        submitButton.disabled = true;
+    }
 }
 
-function submitPoem() {
+function submitPoem(player) {
     let poem = "";
     poemWords.forEach((wordIndex) => {
         poem += selectionWords[wordIndex] + " ";
@@ -62,19 +68,20 @@ function submitPoem() {
     poem = poem.trim();
 
 //     Send the poem to the server
-    fetch("/submit-poem", {
+    fetch("/api/submit-poem", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            player_id: 1,  // Replace with actual player ID
+            player_id: player,
             poem: poem
         })
     }).then(response => response.json())
       .then(data => {
           console.log(data);
       });
+    window.location.href = "/game";
 }
 
 redrawPoem();

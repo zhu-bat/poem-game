@@ -32,6 +32,21 @@ def submit_poem():
     else:
         return {'message': 'Player not found.'}, 404
 
+@bp.route('/submit-vote', methods=['POST'])
+def submit_vote():
+    data = request.get_json()
+    player_id = data.get('player_id')
+    poem_index = data.get('poem_index')
+
+    player = Player.query.get(player_id)
+    if player:
+        player.set_vote(poem_index)
+        db.session.commit()
+        return {'message': 'Vote submitted successfully!'}
+    else:
+        print("Player not found")
+        return {'message': 'Player not found.'}, 404
+
 
 @bp.route('/join_game', methods=['POST'])
 def join_game():

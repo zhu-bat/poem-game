@@ -26,11 +26,11 @@ def title_screen():  # put application's code here
 
 @app.route('/join')
 def room_join():
-    return render_template('room_join.html')
+    return render_template('player/room_join.html')
 
 @app.route('/words-test')
 def words_test():
-    return render_template('words_test.html')
+    return render_template('player/words_test.html')
 
 
 @app.route('/test-create')
@@ -43,14 +43,25 @@ def test_create():
 @app.route('/game')
 def game():
     connected_server = session.get('connected_server')
-    if not connected_server:
+    player_id = session.get('player')
+    if not connected_server or not player_id:
         return redirect(url_for('room_join'))
     server = Server.query.get(connected_server)
-    if not server:
+    player = Player.query.get(player_id)
+    if not server or not player:
         return redirect(url_for('room_join'))
-    if server.round == 0:
-        return render_template('pregame_waiting.html')
-    return render_template('words_test.html')
+
+    if server.phase == "pregame":
+        return render_template('player/pregame_waiting.html', player=player_id)
+    if server.phase == "writing" and not player.poem_submitted():
+        return render_template('player/words_test.html', player=player_id)
+    if server.phase == "writing":
+        return render_template("player/ingame_waiting.html", player=player_id)
+    if server.phase == "voting" and not player.vote_submitted():
+        return render_template("player/voting_test.html", player=player_id)
+    if server.phase == "voting":
+        return render_template("player/ingame_waiting.html", player=player_id)
+    return render_template('game.html', server=server.to_json())
 
 
 @app.route('/clear')

@@ -6,10 +6,18 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 
 @bp.route('/server', methods=['GET'])
 def get_server_data():
-    server_id = session.get('connected_server') or request.get_json().get('id')
+    server_id = session.get('connected_server')
     server = Server.query.get(server_id)
     if server:
         return server.to_json()
+    else:
+        return {}
+
+@bp.route('/servers', methods=['GET'])
+def get_all_servers_data():
+    servers = Server.query.all()
+    if servers:
+        return {server.id: server.to_json() for server in servers}
     else:
         return {}
 
@@ -26,6 +34,18 @@ def get_poem_data():
     player.get_voting_poems(server)
     return {'poems': player.get_voting_poems(server)}
 
+@bp.route('/words', methods=['GET'])
+def get_words():
+    connected_server = session.get('connected_server')
+    player_id = session.get('player')
+    if not connected_server or not player_id:
+        return abort(400, description="No server or player in session.")
+    server = Server.query.get(connected_server)
+    player = Player.query.get(player_id)
+    if not server or not player:
+        return abort(400, description="Invalid server or player.")
+    player.get_words(server)
+    return {'words': player.get_words(server)}
 
 @bp.route('/submit-poem', methods=['POST'])
 def submit_poem():

@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/words.css') }}">
 {% endblock %}
 
-{% block header %}<h1>Round {{server.round}}: Compose a poem</h1>{% endblock %}
+{% block header %}<div class="header"><h1>Round {{server.round}}:</h1><h1 id="start" style="display:none;">Start!</h1></div>{% endblock %}
 
 {% block content %}
-<div class="workspace">
 
+<div class="workspace" style="display:none;">
+<h1>Compose a poem</h1>
 <div id="poem-container" class="poem-container"></div>
 
 <div id="word-counter">0/10 words</div>

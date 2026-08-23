@@ -105,7 +105,7 @@ class Server(db.Model):
         db.session.commit()
 
     def get_players_ranked(self):
-        return sorted(self.get_players(), key=lambda p: p.score)
+        return sorted(self.get_players(), key=lambda p: p.score)[::-1]
 
     def to_json(self):
         return {
@@ -160,9 +160,10 @@ class Player(db.Model):
     def get_ranking(self, server):
         current_rank = 1
         sorted = server.get_players_ranked()
+
         for i, p in enumerate(server.get_players_ranked()):
             if i > 0 and p.score < sorted[i - 1].score:
-                current_rank = i + 1
+                current_rank += 1
             if p.id == self.id:
                 return current_rank
 

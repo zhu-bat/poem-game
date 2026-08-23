@@ -95,7 +95,7 @@ function submitPoem(player) {
           console.log(data);
           // Sleep 1000ms
             setTimeout(() => {
-                window.location.href = "/game";
+                window.location.reload();
             }, 1000);
       });
 }

@@ -10,7 +10,7 @@ function startTimer(endTime) {
         console.log(`Time remaining: ${timeRemaining}s`);
         if (timeRemaining < 0) {
             clearInterval(intervalId);
-            window.location.href = "/game";
+            window.location.reload()
         } else {
             timerElement.textContent = `${timeRemaining}s`;
         }

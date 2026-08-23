@@ -100,7 +100,40 @@ def game():
         return render_template("player/results.html", player=player, server=server, is_vip=is_vip)
 
     if server.phase == "endgame":
-        return render_template("player/endgame.html", player=player_id, server=server, is_vip=is_vip,
+        return render_template("player/endgame.html", player=player, server=server, is_vip=is_vip,
+                               poems=server.get_best_poems())
+
+    return render_template('game.html', server=server.to_json())
+
+
+@app.route('/watch')
+def watch():
+    connected_server = session.get('connected_server')
+    print(f"Connected server {connected_server}")
+    if not connected_server and request.args.get('code'):
+        code = request.args.get('code')
+        print(code)
+        server = Server.query.filter_by(code=code).first()
+        connected_server = server.id
+        print(server)
+        session['connected_server'] = server.id
+    server = Server.query.get(connected_server)
+    time.sleep(1)
+    print(server)
+
+    if server.phase == "pregame":
+        return render_template('player/pregame_waiting.html', server=server)
+    if server.phase == "writing":
+        return render_template("player/ingame_waiting.html", server=server,
+                                                                                phase="voting")
+    if server.phase == "voting":
+        return render_template("player/ingame_waiting.html", server=server,
+                                                                                phase="results")
+    if server.phase == "results":
+        return render_template("player/results.html", server=server)
+
+    if server.phase == "endgame":
+        return render_template("player/endgame.html", server=server,
                                poems=server.get_best_poems())
 
     return render_template('game.html', server=server.to_json())

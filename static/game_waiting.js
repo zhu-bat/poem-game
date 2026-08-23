@@ -16,15 +16,15 @@ function waitForPhase(phase) {
         console.log(data);
         if (data['phase'] === phase) {
           clearInterval(intervalId);
-          window.location.href = "/game";
+          window.location.reload();
         }
         if (phase === 'voting' && data['all_poems_submitted']) {
           clearInterval(intervalId);
-          window.location.href = "/game";
+          window.location.reload();
         }
         if (phase === 'results' && data['all_votes_submitted']) {
           clearInterval(intervalId);
-          window.location.href = "/game";
+          window.location.reload();
         }
         if (phase === 'writing') {
             drawVipPlayerList(Object.values(data['players']));

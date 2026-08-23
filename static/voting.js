@@ -56,7 +56,7 @@ function submitVote(selected) {
           console.log(data);
           // Sleep 1000ms
             setTimeout(() => {
-                window.location.href = "/game";
+                window.location.reload();
             }, 1000);
       });
 }

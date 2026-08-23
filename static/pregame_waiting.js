@@ -17,7 +17,7 @@ function waitForPhase(phase, player) {
       .then(data => {
         if (data['phase'] === phase) {
           clearInterval(intervalId);
-          window.location.href = "/game";
+          window.location.reload();
         }
         drawPlayerList(Object.values(data['players']));
 

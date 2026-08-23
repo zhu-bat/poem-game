@@ -127,3 +127,28 @@ def continue_game():
         return abort(400, description="Game has already started.")
     server.clear_round()
     return redirect(url_for('game'))
+
+@bp.route('/kick-player', methods=['POST'])
+def kick_player():
+    player_id = session.get('player')
+    if not player_id:
+        return abort(400, description="No player in session.")
+    player = Player.query.get(player_id)
+    if not player:
+        return abort(400, description="Invalid player.")
+    if not player.is_vip():
+        return abort(403, description="Only the VIP can kick players.")
+    data = request.get_json()
+    kicking_player_id = data.get('player_id')
+    if not kicking_player_id:
+        return abort(400, description="No player specified to kick.")
+    kicking_player = Player.query.get(kicking_player_id)
+    if not kicking_player:
+        return abort(400, description="Invalid player specified to kick.")
+    if kicking_player.id == player.id:
+        return abort(400, description="Cannot kick yourself.")
+    if kicking_player.server != player.server:
+        return abort(400, description="Cannot kick a player from a different server.")
+    db.session.delete(kicking_player)
+    db.session.commit()
+    return {'message': 'Player kicked successfully!'}

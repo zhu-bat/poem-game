@@ -21,7 +21,12 @@ function waitForPhase(phase, player) {
         }
         drawPlayerList(Object.values(data['players']));
 
-        let isVip = data['players'][player]['vip'];
+        let playerData = data['players'][player];
+        if (playerData === undefined) {
+            window.location.reload();
+        }
+
+        let isVip = playerData['vip'];
         let playerCount = Object.values(data['players']).length;
 
         if (playerCount < 3) {
@@ -58,4 +63,16 @@ function drawPlayerList(players) {
         playerDiv.appendChild(nameSpan);
         playerListContainer.appendChild(playerDiv);
     });
+}
+
+function kickPlayer(player) {
+    fetch("/api/kick-player", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            player_id: player
+        })
+    }).then(response => response.json());
 }

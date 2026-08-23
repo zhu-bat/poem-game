@@ -53,6 +53,9 @@ def submit_poem():
     player_id = data.get('player_id')
     poem = data.get('poem')
 
+    if not poem or len(poem) < 3:
+        return {'message': 'Poem must be at least 3 characters long.'}, 400
+
     player = Player.query.get(player_id)
     if player and poem:
         player.set_poem(poem)
@@ -63,7 +66,6 @@ def submit_poem():
 
 @bp.route('/submit-vote', methods=['POST'])
 def submit_vote():
-    print("GOT VOTE")
     player_id = session.get('player')
     if not player_id:
         return abort(400, description="No player in session.")
@@ -89,17 +91,23 @@ def join_game():
     player_name = data.get('name')
 
 
-    if player_name:
-        player = Player(name=player_name, server=server.id)
-        db.session.add(player)
-        db.session.commit()
-        vip = server.get_vip()
-        session['connected_server'] = server.id
-        session['player'] = player.id
-        return redirect(url_for('game'))
-    else:
+    if not player_name:
         flash("Player name is required", "error")
         return redirect(url_for('room_join', code=join_code))
+    if len(player_name) < 3 or len(player_name) > 20:
+        flash("Player name must be at least 3 characters and at most 20 characters long", "error")
+        return redirect(url_for('room_join', code=join_code))
+    all_player_names = [p.name for p in server.get_players()]
+    if player_name in all_player_names:
+        flash("Player name already taken", "error")
+        return redirect(url_for('room_join', code=join_code))
+    player = Player(name=player_name, server=server.id)
+    db.session.add(player)
+    db.session.commit()
+    server.get_vip()
+    session['connected_server'] = server.id
+    session['player'] = player.id
+    return redirect(url_for('game'))
 
 
 @bp.route('/continue-game')

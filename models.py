@@ -41,9 +41,10 @@ class Server(db.Model):
             str += '\n'
         return str
 
-    def generate_words(self):
+    def generate_words(self, seed=0):
         with open('words.json') as f:
             data = json.load(f)
+            random.seed(self.phase_end + seed)
             return random.choices(list(data.keys()), weights=data.values(), k=40)
 
     def send_voting_poems(self, player):
@@ -134,7 +135,7 @@ class Player(db.Model):
     vote: Mapped[int] = mapped_column(nullable=True, default=None)
 
     def get_words(self, server):
-        return server.generate_words()
+        return server.generate_words(self.id)
 
     def set_poem(self, poem):
         self.poem = poem

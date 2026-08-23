@@ -1,6 +1,5 @@
 .player-list {
-    font-size: 36px;
-    text-align: left;
+    margin-right: 3em;
 }
 
 a {
@@ -12,4 +11,13 @@ a {
 a:hover {
     color: white;
     cursor: pointer;
+}
+
+.kickable-player {
+    cursor: pointer;
+}
+
+.kickable-player:hover {
+    color: #f55;
+    text-decoration: line-through;
 }

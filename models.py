@@ -172,7 +172,8 @@ class Player(db.Model):
                 return current_rank
 
     def to_json(self):
-        return { "name": self.name,
+        return { "id": self.id,
+                 "name": self.name,
                  "vip": self.vip,
                  "score": self.score,
                  "poem": self.poem,

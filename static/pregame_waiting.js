@@ -19,7 +19,6 @@ function waitForPhase(phase, player) {
           clearInterval(intervalId);
           window.location.reload();
         }
-        drawPlayerList(Object.values(data['players']));
 
         let playerData = data['players'][player];
         if (playerData === undefined) {
@@ -28,6 +27,8 @@ function waitForPhase(phase, player) {
 
         let isVip = playerData['vip'];
         let playerCount = Object.values(data['players']).length;
+
+        drawPlayerList(Object.values(data['players']), isVip);
 
         if (playerCount < 3) {
             startGameElement.style.display = 'none';
@@ -48,7 +49,7 @@ function waitForPhase(phase, player) {
   }, 3000);
 }
 
-function drawPlayerList(players) {
+function drawPlayerList(players, isVip) {
     playerListContainer.innerHTML = '';
     players.forEach(player => {
         const playerDiv = document.createElement('div');
@@ -61,6 +62,11 @@ function drawPlayerList(players) {
         nameSpan.textContent = player['name'];
         playerDiv.appendChild(vipSpan);
         playerDiv.appendChild(nameSpan);
+        if (isVip && !player['vip']) {
+            playerDiv.onclick = () => kickPlayer(player['id']);
+            playerDiv.title = 'Click to kick this player';
+            playerDiv.classList.add('kickable-player');
+        }
         playerListContainer.appendChild(playerDiv);
     });
 }

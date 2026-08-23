@@ -102,6 +102,8 @@ function submitPoem(player) {
 
 getJSON("/api/words").then(data => {
     selectionWords = Object.values(data["words"]);
+    selectionWords = selectionWords.sort((a, b) => a.localeCompare(b));
+    selectionWords = selectionWords.sort((a, b) => b.length - a.length);
     console.log(data);
     redrawPoem();
 }).catch(error => {

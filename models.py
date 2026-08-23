@@ -13,8 +13,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///poem_game.db'
 app.secret_key = 'thisisagoodsecretkey'
 db = SQLAlchemy(app, session_options={"autoflush": False})
 
-WRITING_TIMELIMIT = 120
-VOTING_TIMELIMIT = 30
+WRITING_TIMELIMIT = 30
+VOTING_TIMELIMIT = 300
 EMPTY_TIMELIMIT = 600
 
 class GamePhase(enum.Enum):
@@ -44,7 +44,7 @@ class Server(db.Model):
     def generate_words(self):
         with open('words.json') as f:
             data = json.load(f)
-            return random.choices(list(data.keys()), weights=data.values(), k=30)
+            return random.choices(list(data.keys()), weights=data.values(), k=40)
 
     def send_voting_poems(self, player):
         return {p.id: p.poem for p in self.get_players() if p != player and p.poem_submitted()}
@@ -100,12 +100,15 @@ class Server(db.Model):
             p.score += score
             if p.poem and score >= all_scores[(len(all_scores)//3) - 1]:
                 # Save poem
-                poem = Poem(player=p.id, server=self.id, content=p.poem, score=score)
+                poem = Poem(player=p.name, server=self.id, round=self.round, content=p.poem, score=score)
                 db.session.add(poem)
         db.session.commit()
 
     def get_players_ranked(self):
         return sorted(self.get_players(), key=lambda p: p.score)[::-1]
+
+    def get_best_poems(self):
+        return Poem.query.filter_by(server=self.id).order_by(Poem.score.desc()).all()
 
     def to_json(self):
         return {
@@ -180,7 +183,8 @@ class Player(db.Model):
 class Poem(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     server: Mapped[int] = mapped_column(db.ForeignKey(Server.id))
-    player: Mapped[int] = mapped_column(db.ForeignKey(Player.id))
+    player: Mapped[str] = mapped_column(String(20))
+    round: Mapped[int] = mapped_column()
     content: Mapped[str] = mapped_column(String(500))
     score: Mapped[int] = mapped_column(default=0)
 

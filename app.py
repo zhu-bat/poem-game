@@ -99,7 +99,8 @@ def game():
         return render_template("player/results.html", player=player, server=server, is_vip=is_vip)
 
     if server.phase == "endgame":
-        return render_template("player/endgame.html", player=player_id, server=server, is_vip=is_vip)
+        return render_template("player/endgame.html", player=player_id, server=server, is_vip=is_vip,
+                               poems=server.get_best_poems())
 
     return render_template('game.html', server=server.to_json())
 

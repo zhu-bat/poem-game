@@ -23,6 +23,19 @@
     </div>
     {% endfor %}
 </div>
+<h1>Best Poems</h1>
+<div class="leaderboard">
+    {% for p in poems %}
+    <div class="player-entry">
+        <div class="row">
+            <span> {{ p.player }}</span>
+            <span> Round: {{ p.round }}</span>
+            <span class="score"> +{{ p.score }} </span>
+        </div>
+        <div class="player-poem"><em>"{{ p.content }}"</em></div>
+    </div>
+    {% endfor %}
+</div>
 
 
 {% endblock %}

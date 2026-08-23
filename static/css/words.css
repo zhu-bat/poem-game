@@ -1,8 +1,12 @@
+.workspace {
+    margin: 0px 50px;
+}
+
 .poem-selector, .poem-container {
     display: flex;
     flex-wrap: wrap;
     padding: 1em;
-    height: 5em;
+    height: auto;
     gap: 0.5em;
 }
 
@@ -32,13 +36,25 @@
     cursor:not-allowed;
 }
 
-.submit {
+
+
+.row {
+    display:flex;
+    flex-direction:row;
+    margin: 0px 100px;
+}
+
+.row span {
     font-size: 36px;
     color: gray;
     text-decoration: none;
 }
 
-.submit:hover {
+.row span:hover {
     color: white;
     cursor: pointer;
+}
+
+.row .submit {
+    margin-left:700px;
 }

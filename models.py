@@ -1,4 +1,5 @@
 import enum
+import json
 import random
 import time
 
@@ -43,10 +44,9 @@ class Server(db.Model):
         return str
 
     def generate_words(self):
-        xs = []
-        for i in range(5):
-            xs.append(words[random.randint(0, len(words)-1)])
-        return xs
+        with open('words.json') as f:
+            data = json.load(f)
+            return random.choices(list(data.keys()), weights=data.values(), k=30)
 
     def send_voting_poems(self, player):
         return {p.id: p.poem for p in self.get_players() if p != player}

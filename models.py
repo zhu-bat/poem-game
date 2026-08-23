@@ -13,8 +13,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///poem_game.db'
 app.secret_key = 'thisisagoodsecretkey'
 db = SQLAlchemy(app, session_options={"autoflush": False})
 
-WRITING_TIMELIMIT = 30
-VOTING_TIMELIMIT = 300
+WRITING_TIMELIMIT = 180
+VOTING_TIMELIMIT = 60
 EMPTY_TIMELIMIT = 600
 
 class GamePhase(enum.Enum):

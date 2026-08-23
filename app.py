@@ -31,6 +31,7 @@ def create():
     server.set_phase("pregame")
     db.session.add(server)
     db.session.commit()
+    cleanup_games()
     return redirect(url_for('room_join', code=server.code))
 
 
@@ -41,7 +42,7 @@ def cleanup_games():
         print(server, server.phase, server.phase_end)
         if server.phase in {'pregame', 'endgame', 'results'} and server.phase_end < time.time():
             db.session.delete(server)
-        elif not server.get_players():
+        elif server.phase != 'pregame' and not server.get_players():
             db.session.delete(server)
     for player in Player.query.all():
         print(player, player.server)

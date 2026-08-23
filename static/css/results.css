@@ -1,7 +1,10 @@
 .leaderboard {
   display: flex;
   flex-direction: column;
-  width: 600px
+  flex-wrap: wrap;
+  max-height: 70vh;
+  align-content: center;
+  justify-content: space-around;
 }
 
 .leaderboard span {
@@ -13,6 +16,14 @@
 .leaderboard .row {
   display: flex;
   flex-direction: row;
+}
+
+.leaderboard .player-entry {
+    margin-bottom: 10px;
+}
+
+.leaderboard .player-poem {
+    max-width: 400px;
 }
 
 

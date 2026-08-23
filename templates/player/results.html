@@ -16,10 +16,13 @@
 <div class="leaderboard">
 
     {% for p in server.get_players_ranked() %}
-    <div class="row">
-        <span> {{ p.get_ranking(server) }}.</span>
-        <span> {{ p.name }}</span>
-        <span class="score"> {{ p.score }}</span>
+    <div class="player-entry">
+        <div class="row">
+            <span> {{ p.get_ranking(server) }}.</span>
+            <span> {{ p.name }}</span>
+            <span class="score"> {{ p.score }}</span>
+        </div>
+        <div class="player-poem"><em>"{{ p.poem }}"</em></div>
     </div>
     {% endfor %}
 </div>

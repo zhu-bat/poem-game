@@ -3,7 +3,8 @@
 {% block head_extra %}
 
 <script src="{{ url_for('static', filename='game_waiting.js') }}"></script>
- <link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+<script src="{{ url_for('static', filename='results.js') }}"></script> 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
 {% endblock %}
 
 
@@ -20,7 +21,8 @@
         <div class="row">
             <span> {{ p.get_ranking(server) }}.</span>
             <span> {{ p.name }}</span>
-            <span class="score"> {{ p.score }}</span>
+            <span class="score"> {{ p.score - server.get_num_votes(p) * 250 * server.round }} 
+            + {{ server.get_num_votes(p) * 250 * server.round }}</span>
         </div>
         <div class="player-poem"><em>"{{ p.poem }}"</em></div>
     </div>

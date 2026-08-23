@@ -54,7 +54,7 @@ def submit_poem():
     poem = data.get('poem')
 
     player = Player.query.get(player_id)
-    if player:
+    if player and poem:
         player.set_poem(poem)
         db.session.commit()
         return {'message': 'Poem submitted successfully!'}
@@ -63,19 +63,20 @@ def submit_poem():
 
 @bp.route('/submit-vote', methods=['POST'])
 def submit_vote():
+    print("GOT VOTE")
+    player_id = session.get('player')
+    if not player_id:
+        return abort(400, description="No player in session.")
+    player = Player.query.get(player_id)
+    if not player:
+        return abort(400, description="Invalid player.")
+
     data = request.get_json()
-    player_id = data.get('player_id')
     poem_index = data.get('poem_index')
 
-    player = Player.query.get(player_id)
-    if player:
-        player.set_vote(poem_index)
-        db.session.commit()
-        return {'message': 'Vote submitted successfully!'}
-    else:
-        print("Player not found")
-        return {'message': 'Player not found.'}, 404
-
+    player.set_vote(poem_index)
+    db.session.commit()
+    return {'message': 'Vote submitted successfully!'}
 
 @bp.route('/join_game', methods=['POST'])
 def join_game():

@@ -65,7 +65,7 @@ def game():
 
     server.get_vip()
     is_vip = player.is_vip()
-    if is_vip:
+    if is_vip or time.time() > server.phase_end + 30:
         if server.phase == "writing" and (server.all_poems_submitted() or time.time() > server.phase_end):
             server.set_phase("voting")
             db.session.commit()

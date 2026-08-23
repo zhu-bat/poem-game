@@ -24,7 +24,7 @@
             <span class="score"> {{ p.score - server.get_num_votes(p) * 250 * server.round }} 
             + {{ server.get_num_votes(p) * 250 * server.round }}</span>
         </div>
-        <div class="player-poem"><em>"{{ p.poem }}"</em></div>
+        <div class="player-poem"><em>{% if p.poem %}"{{ p.poem }}"{% else %}No submission{% endif %}</em></div>
     </div>
     {% endfor %}
 </div>

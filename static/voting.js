@@ -34,20 +34,22 @@ function redrawPoems() {
     });
     if (selectedPoem !== null) {
         submitButton.disabled = false;
+        submitButton.onclick = () => {
+            submitVote(selectedPoem);
+        };
     } else {
         submitButton.disabled = true;
     }
 }
 
-function submitVote(player) {
+function submitVote(selected) {
     fetch("/api/submit-vote", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            player_id: player,
-            poem_index: selectedPoem
+            poem_index: selected
         })
     }).then(response => response.json())
       .then(data => {
@@ -61,6 +63,12 @@ function submitVote(player) {
 
 getJSON("/api/poems").then(data => {
     poems = data;
+    const poemKeys = Object.keys(poems['poems']);
+    if (poemKeys.length === 1) {
+        submitVote(poemKeys[0]);
+    } else if (poemKeys.length < 1) {
+        submitVote(-1);
+    }
     console.log(data);
     redrawPoems();
 }).catch(error => {

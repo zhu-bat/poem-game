@@ -11,13 +11,11 @@ from sqlalchemy.orm import Mapped, mapped_column
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///poem_game.db'
 app.secret_key = 'thisisagoodsecretkey'
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, session_options={"autoflush": False})
 
 WRITING_TIMELIMIT = 120
 VOTING_TIMELIMIT = 30
 EMPTY_TIMELIMIT = 600
-
-words = ["a", "an", "the", "and", "all", "am", "is"]
 
 class GamePhase(enum.Enum):
     PREGAME = "pregame"
@@ -49,7 +47,7 @@ class Server(db.Model):
             return random.choices(list(data.keys()), weights=data.values(), k=30)
 
     def send_voting_poems(self, player):
-        return {p.id: p.poem for p in self.get_players() if p != player}
+        return {p.id: p.poem for p in self.get_players() if p != player and p.poem_submitted()}
 
     def all_poems_submitted(self):
         return all([p.poem_submitted() for p in self.get_players()])
@@ -100,7 +98,7 @@ class Server(db.Model):
         for p in self.get_players():
             score = self.get_num_votes(p) * 250 * self.round
             p.score += score
-            if score >= all_scores[(len(all_scores)//3) - 1]:
+            if p.poem and score >= all_scores[(len(all_scores)//3) - 1]:
                 # Save poem
                 poem = Poem(player=p.id, server=self.id, content=p.poem, score=score)
                 db.session.add(poem)
@@ -135,8 +133,8 @@ class Player(db.Model):
     def get_words(self, server):
         return server.generate_words()
 
-    def set_poem(self, str):
-        self.poem = str
+    def set_poem(self, poem):
+        self.poem = poem
 
     def get_voting_poems(self, server):
         return server.send_voting_poems(self)

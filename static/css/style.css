@@ -64,5 +64,8 @@ h1 {
 
 .button:hover {
     color: white;
+    cursor: pointer;
     text-decoration: underline;
 }
+
+

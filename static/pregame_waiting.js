@@ -9,6 +9,7 @@ const getJSON = async url => {
 const playerListContainer = document.getElementById('player-list');
 const startGameElement = document.getElementById('start-game');
 const startHintElement = document.getElementById('start-hint');
+const dotsElement = document.getElementById('dots');
 
 function waitForPhase(phase, player) {
   const intervalId = setInterval(() => {
@@ -32,7 +33,7 @@ function waitForPhase(phase, player) {
 
         if (playerCount < 3) {
             startGameElement.style.display = 'none';
-            startHintElement.textContent = "Waiting for more players to join...";
+            startHintElement.textContent = "Game can only start when there are 3 or more players.";
         } else if (!isVip) {
             startGameElement.style.display = 'none';
             startHintElement.textContent = "Waiting for VIP to start game...";
@@ -82,3 +83,12 @@ function kickPlayer(player) {
         })
     }).then(response => response.json());
 }
+
+setInterval(() => {
+    const newLen = (dotsElement.textContent.length % 3) + 1;
+    let newDots = ""
+    for (let i = 0; i < newLen; i++) {
+        newDots += "."
+    }
+    dotsElement.textContent = newDots;
+}, 500);

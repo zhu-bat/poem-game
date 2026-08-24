@@ -5,7 +5,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/waiting.css') }}">
 {% endblock %}
 
-{% block header %}<h1>Waiting for players...</h1>{% endblock %}
+{% block header %}
+<div class="waiting">
+<h1>Waiting for players</h1><h1 id="dots">.</h1>
+</div>
+{% endblock %}
 
 {% block content %}
 

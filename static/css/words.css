@@ -53,17 +53,6 @@
     margin: 0px 100px;
 }
 
-.row span {
-    font-size: 36px;
-    color: gray;
-    text-decoration: none;
-}
-
-.row span:hover {
-    color: white;
-    cursor: pointer;
-}
-
 .row .submit {
     margin-left:700px;
 }

@@ -1,6 +1,6 @@
 from flask import request, Blueprint, session, redirect, url_for, flash, abort
 
-from models import Server, Player, db
+from models import Server, Player, db, GamePhase
 
 bp = Blueprint('api', __name__, url_prefix='/api')
 
@@ -64,7 +64,7 @@ def submit_poem():
     connected_server = session.get('connected_server')
     if connected_server:
         server = Server.query.get(connected_server)
-        if server and server.phase != 'writing':
+        if server and server.phase != GamePhase.WRITING:
             return abort(400, description="Server is not in writing phase.")
 
     data = request.get_json()
@@ -138,7 +138,7 @@ def continue_game():
     # is_vip = player.is_vip()
     # if not is_vip:
     #     return abort(403, description="Only the VIP can start the game.")
-    if server.phase not in {"pregame", "results"}:
+    if server.phase not in {GamePhase.PREGAME, GamePhase.RESULTS}:
         return abort(400, description="Game has already started.")
     server.clear_round()
     return redirect(url_for('game'))

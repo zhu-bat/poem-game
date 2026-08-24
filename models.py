@@ -27,7 +27,7 @@ class GamePhase(enum.Enum):
 class Server(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     code: Mapped[str] = mapped_column(String(10), unique=True, default=lambda: str(random.randint(1000, 9999)))
-    phase: Mapped[str] = mapped_column(default=GamePhase.PREGAME.value)
+    phase: Mapped[GamePhase] = mapped_column(default=GamePhase.PREGAME)
     round: Mapped[int] = mapped_column(default=0)
     phase_end: Mapped[int] = mapped_column(default=0)
 
@@ -73,17 +73,17 @@ class Server(db.Model):
             p.vote = None
         self.round += 1
         if (self.round <= 3):
-            self.set_phase("writing")
+            self.set_phase(GamePhase.WRITING)
         else:
-            self.set_phase("endgame")
+            self.set_phase(GamePhase.ENDGAME)
         db.session.commit()
 
     def set_phase(self, phase):
         self.phase = phase
         match phase:
-            case "writing":
+            case GamePhase.WRITING:
                 self.phase_end = int(time.time()) + WRITING_TIMELIMIT
-            case "voting":
+            case GamePhase.VOTING:
                 self.phase_end = int(time.time()) + VOTING_TIMELIMIT
             case _:
                 self.phase_end = int(time.time()) + EMPTY_TIMELIMIT
@@ -116,7 +116,7 @@ class Server(db.Model):
             "id": self.id,
             "code": self.code,
             "round": self.round,
-            "phase": self.phase,
+            "phase": self.phase.value,
             "phase_end": self.phase_end,
             "players": {p.id: p.to_json() for p in self.get_players()},
             "all_poems_submitted": self.all_poems_submitted(),

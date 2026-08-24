@@ -3,7 +3,7 @@ import time
 from flask import render_template, url_for, redirect, session, request
 
 from bp_api import bp as bp_api
-from models import app, db, Server, Player
+from models import app, db, Server, Player, GamePhase
 
 
 app.register_blueprint(bp_api)
@@ -31,7 +31,7 @@ def words_test():
 @app.route('/create')
 def create():
     server = Server()
-    server.set_phase("pregame")
+    server.set_phase(GamePhase.PREGAME)
     db.session.add(server)
     db.session.commit()
     cleanup_games()
@@ -43,9 +43,9 @@ def cleanup_games():
     # Clear players with no games
     for server in Server.query.all():
         print(server, server.phase, server.phase_end)
-        if server.phase in {'pregame', 'endgame', 'results'} and server.phase_end < time.time():
+        if server.phase in {GamePhase.PREGAME, GamePhase.ENDGAME, GamePhase.RESULTS} and server.phase_end < time.time():
             db.session.delete(server)
-        elif server.phase != 'pregame' and not server.get_players():
+        elif server.phase != GamePhase.PREGAME and not server.get_players():
             db.session.delete(server)
     for player in Player.query.all():
         print(player, player.server)
@@ -70,44 +70,46 @@ def game():
     server.get_vip()
     is_vip = player.is_vip()
     # If the game hasn't progressed for VIP_OVERRULE_TIME seconds beyond phase end, vip is probably gone
-    if is_vip or time.time() > server.phase_end + VIP_OVERRULE_TIME:
+
+    current_time = time.time()
+
+    if is_vip or server.get_vip().last_seen + MAX_PLAYER_IDLE_TIME < current_time:
         print(f"{player} is doing a step")
-        current_time = time.time()
-        if server.phase == "writing" and (server.all_poems_submitted() or current_time > server.phase_end):
-            server.set_phase("voting")
-        if server.phase == "voting" and (server.all_votes_submitted() or current_time > server.phase_end):
+        if server.phase == GamePhase.WRITING and (server.all_poems_submitted() or current_time > server.phase_end):
+            server.set_phase(GamePhase.VOTING)
+        if server.phase == GamePhase.VOTING and (server.all_votes_submitted() or current_time > server.phase_end):
             if server.round <= 2:
                 server.update_score()
-                server.set_phase("results")
+                server.set_phase(GamePhase.RESULTS)
             else:   # end of round 3
                 server.update_score()
-                server.set_phase("endgame")
+                server.set_phase(GamePhase.ENDGAME)
         for player in server.get_players():
             if player.last_seen and player.last_seen + MAX_PLAYER_IDLE_TIME < current_time:
                 print(f"{player} timed out")
                 db.session.delete(player)
         db.session.commit()
 
-    if server.phase == "pregame":
+    if server.phase == GamePhase.PREGAME:
         return render_template('player/pregame_waiting.html', player=player, server=server,
                                                                                 is_vip=is_vip)
-    if server.phase == "writing" and not player.poem_submitted():
+    if server.phase == GamePhase.WRITING and not player.poem_submitted():
         return render_template('player/words_test.html', player=player, server=server)
 
-    if server.phase == "writing":
+    if server.phase == GamePhase.WRITING:
         return render_template("player/ingame_waiting.html", player=player, server=server,
                                                                                 phase="voting")
-    if server.phase == "voting" and not player.vote_submitted():
+    if server.phase == GamePhase.VOTING and not player.vote_submitted():
         return render_template("player/voting_test.html", player=player, server=server)
 
-    if server.phase == "voting":
+    if server.phase == GamePhase.VOTING:
         return render_template("player/ingame_waiting.html", player=player, server=server,
                                                                                 phase="results")
-    if server.phase == "results":
+    if server.phase == GamePhase.RESULTS:
         
         return render_template("player/results.html", player=player, server=server, is_vip=is_vip)
 
-    if server.phase == "endgame":
+    if server.phase == GamePhase.ENDGAME:
         return render_template("player/endgame.html", player=player, server=server, is_vip=is_vip,
                                poems=server.get_best_poems())
 
@@ -129,18 +131,18 @@ def watch():
     time.sleep(1)
     print(server)
 
-    if server.phase == "pregame":
+    if server.phase == GamePhase.PREGAME:
         return render_template('player/pregame_waiting.html', server=server)
-    if server.phase == "writing":
+    if server.phase == GamePhase.WRITING:
         return render_template("player/ingame_waiting.html", server=server,
                                                                                 phase="voting")
-    if server.phase == "voting":
+    if server.phase == GamePhase.VOTING:
         return render_template("player/ingame_waiting.html", server=server,
                                                                                 phase="results")
-    if server.phase == "results":
+    if server.phase == GamePhase.RESULTS:
         return render_template("player/results.html", server=server)
 
-    if server.phase == "endgame":
+    if server.phase == GamePhase.ENDGAME:
         return render_template("player/endgame.html", server=server,
                                poems=server.get_best_poems())
 

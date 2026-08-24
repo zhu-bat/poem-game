@@ -49,20 +49,28 @@ def get_words():
 
 @bp.route('/submit-poem', methods=['POST'])
 def submit_poem():
+    player_id = session.get('player')
+    if not player_id:
+        return abort(400, description="No player in session.")
+    player = Player.query.get(player_id)
+    if not player:
+        return abort(400, description="Invalid player.")
+
+    connected_server = session.get('connected_server')
+    if connected_server:
+        server = Server.query.get(connected_server)
+        if server and server.phase != 'writing':
+            return abort(400, description="Server is not in writing phase.")
+
     data = request.get_json()
-    player_id = data.get('player_id')
     poem = data.get('poem')
 
     if not poem or len(poem) < 3:
         return {'message': 'Poem must be at least 3 characters long.'}, 400
 
-    player = Player.query.get(player_id)
-    if player and poem:
-        player.set_poem(poem)
-        db.session.commit()
-        return {'message': 'Poem submitted successfully!'}
-    else:
-        return {'message': 'Player not found.'}, 404
+    player.set_poem(poem)
+    db.session.commit()
+    return {'message': 'Poem submitted successfully!'}
 
 @bp.route('/submit-vote', methods=['POST'])
 def submit_vote():
@@ -75,6 +83,8 @@ def submit_vote():
 
     data = request.get_json()
     poem_index = data.get('poem_index')
+    if poem_index == player_id:
+        return abort(400, description="You cannot vote for your own poem")
 
     player.set_vote(poem_index)
     db.session.commit()

@@ -8,6 +8,11 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 def get_server_data():
     server_id = session.get('connected_server')
     server = Server.query.get(server_id)
+    player_id = session.get('player')
+    if player_id:
+        player = Player.query.get(player_id)
+        if player:
+            player.update_last_seen()
     if server:
         return server.to_json()
     else:

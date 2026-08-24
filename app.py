@@ -8,6 +8,9 @@ from models import app, db, Server, Player
 
 app.register_blueprint(bp_api)
 
+VIP_OVERRULE_TIME = 30
+MAX_PLAYER_IDLE_TIME = 300
+
 
 @app.route('/')
 def title_screen():  # put application's code here
@@ -66,19 +69,24 @@ def game():
 
     server.get_vip()
     is_vip = player.is_vip()
-    if is_vip or time.time() > server.phase_end + 30:
-        if server.phase == "writing" and (server.all_poems_submitted() or time.time() > server.phase_end):
+    # If the game hasn't progressed for VIP_OVERRULE_TIME seconds beyond phase end, vip is probably gone
+    if is_vip or time.time() > server.phase_end + VIP_OVERRULE_TIME:
+        print(f"{player} is doing a step")
+        current_time = time.time()
+        if server.phase == "writing" and (server.all_poems_submitted() or current_time > server.phase_end):
             server.set_phase("voting")
-            db.session.commit()
-        if server.phase == "voting" and (server.all_votes_submitted() or time.time() > server.phase_end):
+        if server.phase == "voting" and (server.all_votes_submitted() or current_time > server.phase_end):
             if server.round <= 2:
                 server.update_score()
                 server.set_phase("results")
-                db.session.commit()
             else:   # end of round 3
                 server.update_score()
                 server.set_phase("endgame")
-                db.session.commit()
+        for player in server.get_players():
+            if player.last_seen and player.last_seen + MAX_PLAYER_IDLE_TIME < current_time:
+                print(f"{player} timed out")
+                db.session.delete(player)
+        db.session.commit()
 
     if server.phase == "pregame":
         return render_template('player/pregame_waiting.html', player=player, server=server,

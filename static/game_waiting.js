@@ -26,12 +26,9 @@ function waitForPhase(phase) {
           clearInterval(intervalId);
           window.location.reload();
         }
-        if (phase === 'writing') {
-            drawVipPlayerList(Object.values(data['players']));
-        } else {
-            let subType = phase === 'voting' ? 'poem_submitted' : 'vote_submitted';
-            drawPlayerList(Object.values(data['players']), subType);
-        }
+
+        let subType = phase === 'voting' ? 'poem_submitted' : 'vote_submitted';
+        drawPlayerList(Object.values(data['players']), subType);
       })
       .catch(error => {
         console.error(error);

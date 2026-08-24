@@ -133,6 +133,7 @@ class Player(db.Model):
     score: Mapped[int] = mapped_column(default=0)
     poem: Mapped[str] = mapped_column(String(500), nullable=True, default=None)
     vote: Mapped[int] = mapped_column(nullable=True, default=None)
+    last_seen: Mapped[int] = mapped_column(default=0)
 
     def get_words(self, server):
         return server.generate_words(self.id)
@@ -171,6 +172,9 @@ class Player(db.Model):
             if p.id == self.id:
                 return current_rank
 
+    def update_last_seen(self):
+        self.last_seen = time.time()
+
     def to_json(self):
         return { "id": self.id,
                  "name": self.name,
@@ -181,6 +185,9 @@ class Player(db.Model):
                  "poem_submitted": self.poem_submitted(),
                  "vote_submitted": self.vote_submitted()
                  }
+
+    def __str__(self):
+        return f"Player(id={self.id}, name={self.name}, vip={self.vip})"
 
 class Poem(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)

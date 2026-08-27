@@ -16,6 +16,14 @@ MAX_PLAYER_IDLE_TIME = 300
 def title_screen():  # put application's code here
     return render_template('title_screen.html')
 
+@app.route('/how_to_play')
+def how_to_play():
+    return render_template('how_to_play.html')
+
+@app.route('/credits')
+def credits():
+    return render_template('credits.html')    
+
 
 @app.route('/join')
 def room_join():

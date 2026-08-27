@@ -30,6 +30,6 @@
 </div>
 
 {% if is_vip %}
-<a href="{{ url_for('api.continue_game') }}">Start next round</a>
+<a class="button" href="{{ url_for('api.continue_game') }}">Start next round</a>
 {% endif %}
 {% endblock %}

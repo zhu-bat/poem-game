@@ -1,15 +1,4 @@
-.title {
-    animation-name: animation;
-    animation-duration: 0.25s;
-    letter-spacing: 8px;
-    margin-top: 75px;
-}
 
-@keyframes animation {
-    0% {opacity:0%; transform:translateY(75px);}
-    75% {opacity:75%; transform:translateY(-20px)}
-    100% {opacity:100%; transform:translateY(0px)}
-}
 
 a {
     animation-name: a-animation;

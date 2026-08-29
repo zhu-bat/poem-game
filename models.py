@@ -41,11 +41,17 @@ class Server(db.Model):
             str += '\n'
         return str
 
-    def generate_words(self, seed=0):
+    @staticmethod
+    @lru_cache(maxsize=32)
+    def generate_words(seed: int = 0):
+        random.seed(seed)
         with open('words.json') as f:
             data = json.load(f)
-            random.seed(self.phase_end + seed)
-            return random.choices(list(data.keys()), weights=data.values(), k=40)
+            rngdle_words = random.choices(list(data.keys()), weights=data.values(), k=25)
+        with open('corpus.json') as f:
+            data = json.load(f)
+            corpus_words = random.choices(list(data.keys()), weights=data.values(), k=15)
+        return rngdle_words + corpus_words
 
     def send_voting_poems(self, player):
         return {p.id: p.poem for p in self.get_players() if p != player and p.poem_submitted()}
@@ -136,7 +142,7 @@ class Player(db.Model):
     last_seen: Mapped[int] = mapped_column(default=0)
 
     def get_words(self, server):
-        return server.generate_words(self.id)
+        return server.generate_words(server.phase_end + self.id)
 
     def set_poem(self, poem):
         self.poem = poem

@@ -1,6 +1,6 @@
 # RNGwars
 
-# [Play now!](https://zhubat.uqcloud.net/)
+# [Play now!](https://rngwars.uqcloud.net/)
 
 3-8 players
 

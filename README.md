@@ -13,3 +13,5 @@
 Pointer Rain: API (frontend and backend)
 
 Zhubat: CSS (and moral support)
+
+Based on [RNGdle](https://www.rngdle.com/) and inspired by [Jackbox Games](https://www.jackboxgames.com/games).

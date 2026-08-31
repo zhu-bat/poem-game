@@ -2,12 +2,43 @@
 
 {% block head_extra %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/htp.css') }}">
+    <script src="{{ url_for('static', filename='how_to_play.js') }}"></script> 
 {% endblock %}
 
 
 {% block header %}<h1 class="title">How To Play</h1>{% endblock %}
 
 {% block content %}
+
+
+<div class="slideshow">
+
+  <div class="slide" style="display:block;">
+    <div class="numbertext">1 / 3</div>
+    
+    <div class="text">Players are given a random selection of words. Use these to compose a poem within 2 minutes.
+</div>
+  </div>
+
+  <div class="slide">
+    <div class="numbertext">2 / 3</div>
+    
+    <div class="text">You will then be shown the poems of your opponents. Vote on your favourite!</div>
+  </div>
+
+  <div class="slide">
+    <div class="numbertext">3 / 3</div>
+    
+    <div class="text">Scores are distributed based on how many players vote for your poem. Points are worth double in the second round and triple in the third round. It is always anyone's game!</div>
+  </div>
+</div>
+
+  <div class="arrows">
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+  </div>
+<br>
+
 
 <a href="/" class="mm">< Back to main menu</a>
 

@@ -10,10 +10,10 @@
 {% block content %}
 
 
-<a class="button host" href="{{ url_for('create') }}">Host game</a>
-<a class="button join" href="{{ url_for('room_join') }}">Join game</a>
-<a class="button htp" href="{{ url_for('how_to_play') }}">How to play</a>
-<a class="button credits" href="{{ url_for('credits') }}">Credits</a>
+<a class="button popup first" href="{{ url_for('create') }}">Host game</a>
+<a class="button popup second" href="{{ url_for('room_join') }}">Join game</a>
+<a class="button popup third" href="{{ url_for('how_to_play') }}">How to play</a>
+<a class="button popup fourth" href="{{ url_for('credits') }}">Credits</a>
 
 
 {% endblock %}

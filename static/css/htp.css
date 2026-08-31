@@ -1,9 +1,50 @@
-a {
-    color: gray;
-    text-decoration: none;
+* {box-sizing:border-box}
+
+
+.slideshow {
+  display:flex;
+  width:800px;
+  height:200px;
+  flex-direction:column;
 }
 
-a:hover {
-    color: white;
-    text-decoration: underline; 
+.slide {
+  display: none;
+}
+
+.prev, .next {
+  cursor: pointer;
+  top: 50%;
+  margin-top: -22px;
+  padding: 16px;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+
+.text {
+  font-size: 15px;
+  padding: 8px 12px;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+
+.numbertext {
+  font-size: 12px;
+  padding: 8px 12px;
+}
+
+.arrows {
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
 }

@@ -84,14 +84,37 @@ h1 {
 }
 
 .title {
-    animation-name: animation;
+    animation-name: popup-animation;
     animation-duration: 0.25s;
     letter-spacing: 8px;
     margin-top: 75px;
 }
 
-@keyframes animation {
+@keyframes popup-animation {
     0% {opacity:0%; transform:translateY(75px);}
     75% {opacity:75%; transform:translateY(-20px)}
     100% {opacity:100%; transform:translateY(0px)}
+}
+
+.popup {
+
+    animation-name: popup-animation;
+    animation-duration:0.25s;
+    animation-fill-mode: both;
+}
+
+.first {
+    animation-delay:0.25s;
+}
+
+.second {
+    animation-delay:0.5s;
+}
+
+.third {
+    animation-delay:0.75s;
+}
+
+.fourth {
+    animation-delay:1s;
 }

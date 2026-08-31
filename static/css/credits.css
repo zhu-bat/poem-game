@@ -10,3 +10,8 @@ a:hover {
     color: white;
     text-decoration: underline; 
 }
+
+p {
+    animation-name: popup;
+    animation-duration:0.25s;
+}

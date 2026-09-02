@@ -10,6 +10,9 @@
 
 .slide {
   display: none;
+  animation-name: slide-animation;
+  animation-duration:0.25s;
+  animation-fill-mode: both;
 }
 
 .prev, .next {

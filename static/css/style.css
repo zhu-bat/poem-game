@@ -84,21 +84,20 @@ h1 {
 }
 
 .title {
-    animation-name: popup-animation;
-    animation-duration: 0.25s;
+    animation-name: slide-animation;
+    animation-duration:0.25s;
     letter-spacing: 8px;
     margin-top: 75px;
 }
 
-@keyframes popup-animation {
+/* @keyframes popup-animation {
     0% {opacity:0%; transform:translateY(75px);}
     75% {opacity:75%; transform:translateY(-20px)}
     100% {opacity:100%; transform:translateY(0px)}
-}
+} */
 
 .popup {
-
-    animation-name: popup-animation;
+    animation-name: slide-animation;
     animation-duration:0.25s;
     animation-fill-mode: both;
 }
@@ -117,4 +116,9 @@ h1 {
 
 .fourth {
     animation-delay:1s;
+}
+
+@keyframes slide-animation {
+    0% {opacity:0%; transform:translateX(75px);}
+    100% {opacity:100%; transform:translateX(0px)}
 }

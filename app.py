@@ -1,6 +1,6 @@
 import time
 
-from flask import render_template, url_for, redirect, session, request
+from flask import render_template, url_for, redirect, session, request, abort
 
 from bp_api import bp as bp_api
 from models import app, db, Server, Player, GamePhase
@@ -46,7 +46,7 @@ def create():
     return redirect(url_for('room_join', code=server.code))
 
 
-def cleanup_games():
+def cleanup_games() -> None:
     # Clear old games only if they are on the results screen or pregame screen and have expired
     # Clear players with no games
     for server in Server.query.all():
@@ -154,7 +154,7 @@ def watch():
         return render_template("player/endgame.html", server=server,
                                poems=server.get_best_poems())
 
-    return render_template('game.html', server=server.to_json())
+    return abort(400, "Invalid server phase.")
 
 
 @app.route('/clear')
